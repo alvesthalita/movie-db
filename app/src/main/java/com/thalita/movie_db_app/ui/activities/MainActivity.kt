@@ -2,9 +2,12 @@ package com.thalita.movie_db_app.ui.activities
 
 import com.thalita.movie_db_app.R
 import com.thalita.movie_db_app.ui.activities.generic.GenericActivity
+import com.thalita.movie_db_app.ui.fragments.HomeFragment
 import com.thalita.movie_db_app.ui.fragments.LoginFragment
 
 class MainActivity : GenericActivity() {
+
+    private var userLogged: Boolean = false
 
     override fun setLayout() {
         hideTop(true)
@@ -18,7 +21,14 @@ class MainActivity : GenericActivity() {
         init()
     }
 
-    fun init(){
-        replaceFragment(LoginFragment())
+    private fun init(){
+        userLogged = true
+//        userLogged = intent.hasExtra("userLogged")
+
+        if(userLogged){
+            replaceFragment(HomeFragment())
+        }else {
+            replaceFragment(LoginFragment())
+        }
     }
 }

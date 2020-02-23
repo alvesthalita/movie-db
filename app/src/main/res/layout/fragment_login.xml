@@ -26,7 +26,7 @@
                     android:src="@drawable/movie_icon"/>
 
                 <com.beardedhen.androidbootstrap.BootstrapEditText
-                    android:id="@+id/edt_login"
+                    android:id="@+id/edt_login_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="E-mail"
@@ -38,7 +38,7 @@
 
 
                 <com.beardedhen.androidbootstrap.BootstrapEditText
-                    android:id="@+id/edt_senha"
+                    android:id="@+id/edt_login_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Senha"

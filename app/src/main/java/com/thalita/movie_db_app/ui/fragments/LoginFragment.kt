@@ -1,113 +1,44 @@
 package com.thalita.movie_db_app.ui.fragments
 
-import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
+import com.beardedhen.androidbootstrap.BootstrapButton
+import com.beardedhen.androidbootstrap.BootstrapEditText
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import com.thalita.movie_db_app.R
+import com.thalita.movie_db_app.entities.User
+import com.thalita.movie_db_app.ui.activities.MainActivity
+import com.thalita.movie_db_app.utils.ConfigFirebase
+import com.thalita.movie_db_app.utils.ValidateInput
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Activities that contain this fragment must implement the
- * [LoginFragment.OnFragmentInteractionListener] interface
- * to handle interaction events.
- * Use the [LoginFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class LoginFragment : Fragment() {
-//    // TODO: Rename and change types of parameters
-//    private var param1: String? = null
-//    private var param2: String? = null
-//    private var listener: OnFragmentInteractionListener? = null
-//
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//        arguments?.let {
-//            param1 = it.getString(ARG_PARAM1)
-//            param2 = it.getString(ARG_PARAM2)
-//        }
-//    }
-//
-//    override fun onCreateView(
-//        inflater: LayoutInflater, container: ViewGroup?,
-//        savedInstanceState: Bundle?
-//    ): View? {
-//        // Inflate the layout for this fragment
-//        return inflater.inflate(R.layout.fragment_login, container, false)
-//    }
-//
-//    // TODO: Rename method, update argument and hook method into UI event
-//    fun onButtonPressed(uri: Uri) {
-//        listener?.onFragmentInteraction(uri)
-//    }
-//
-//    override fun onAttach(context: Context) {
-//        super.onAttach(context)
-//        if (context is OnFragmentInteractionListener) {
-//            listener = context
-//        } else {
-//            throw RuntimeException(context.toString() + " must implement OnFragmentInteractionListener")
-//        }
-//    }
-//
-//    override fun onDetach() {
-//        super.onDetach()
-//        listener = null
-//    }
-//
-//    /**
-//     * This interface must be implemented by activities that contain this
-//     * fragment to allow an interaction in this fragment to be communicated
-//     * to the activity and potentially other fragments contained in that
-//     * activity.
-//     *
-//     *
-//     * See the Android Training lesson [Communicating with Other Fragments]
-//     * (http://developer.android.com/training/basics/fragments/communicating.html)
-//     * for more information.
-//     */
-//    interface OnFragmentInteractionListener {
-//        // TODO: Update argument type and name
-//        fun onFragmentInteraction(uri: Uri)
-//    }
-//
-//    companion object {
-//        /**
-//         * Use this factory method to create a new instance of
-//         * this fragment using the provided parameters.
-//         *
-//         * @param param1 Parameter 1.
-//         * @param param2 Parameter 2.
-//         * @return A new instance of fragment LoginFragment.
-//         */
-//        // TODO: Rename and change types and number of parameters
-//        @JvmStatic
-//        fun newInstance(param1: String, param2: String) =
-//            LoginFragment().apply {
-//                arguments = Bundle().apply {
-//                    putString(ARG_PARAM1, param1)
-//                    putString(ARG_PARAM2, param2)
-//                }
-//            }
-//    }
+
+    private lateinit var edt_login : BootstrapEditText
+    private lateinit var edt_password : BootstrapEditText
+    private lateinit var btn_login : BootstrapButton
+    private var databaseReference: DatabaseReference? = null
+    private var firebaseAuth: FirebaseAuth? = null
+    private var user: User? = null
+    private val fm: FragmentManager? = null
+    private var ft: FragmentTransaction? = null
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
 
         val view: View = inflater.inflate(
             R.layout.fragment_login, container,
             false)
+
         initComponent(view)
 
         return view
@@ -119,33 +50,86 @@ class LoginFragment : Fragment() {
     }
 
     fun initComponent(view: View){
-        (activity as AppCompatActivity?)!!.supportActionBar!!.hide()
 
-//        val btnAdd = view.findViewById(R.id.home_btn_add) as LinearLayout
-//        val btnSearch = view.findViewById(R.id.home_btn_search) as LinearLayout
-//        val btnFavorite = view.findViewById(R.id.home_btn_favorite) as LinearLayout
-//
-//        btnAdd.setOnClickListener {
-//            startActivity(AddRecipeActivity::class.java, null)
-//        }
-//
-//        btnSearch.setOnClickListener {
-//            startActivity(SearchRecipeActivity::class.java, null)
-//        }
-//
-//        btnFavorite.setOnClickListener {
-//            startActivity(FavoritiesRecipesActivity::class.java, null)
-//        }
+        (activity as AppCompatActivity?)!!.supportActionBar!!.hide()
+        edt_login = view.findViewById(R.id.edt_login_email)
+        edt_password = view.findViewById(R.id.edt_login_password)
+        btn_login = view.findViewById(R.id.btn_login)
+
+        databaseReference = FirebaseDatabase.getInstance().reference
+        firebaseAuth = ConfigFirebase().getFirebaseAuth()
+        user = User()
+
+        initActions()
     }
 
-    fun startActivity(activityType: Class<*>, bundle: Bundle?) {
-        val intent = Intent(context, activityType)
-        intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
+    private fun initActions(){
+        btn_login.setOnClickListener {
+            validateFields()
+        }
+    }
 
-        if (bundle != null) {
-            intent.putExtras(bundle)
+    private fun validateFields(){
+
+        if(edt_login.text.isEmpty()){
+            Toast.makeText(
+                activity,
+                "O campo de e-mail é obrigatório, tente novamente.",
+                Toast.LENGTH_LONG
+            ).show()
+            return
         }
 
+        if(!ValidateInput().isEmailValid(edt_login.text.toString())){
+            Toast.makeText(
+                activity,
+                "E-mail inválido, por favor insira um e-mail válido e tente novamente.",
+                Toast.LENGTH_LONG
+            ).show()
+            return
+        }
+
+        if(edt_password.text.isEmpty()){
+            Toast.makeText(
+                activity,
+                "O campo de senha é obrigatório, tente novamente.",
+                Toast.LENGTH_LONG
+            ).show()
+            return
+        }
+
+        startLogin()
+    }
+
+    private fun startLogin() {
+        user?.setEmail(edt_login.text.toString())
+        user?.setSenha(edt_password.text.toString())
+
+        user?.getEmail()?.let {
+            firebaseAuth?.signInWithEmailAndPassword(it, user!!.getSenha()!!)
+                ?.addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        Toast.makeText(
+                            activity,
+                            "Login efetuado com sucesso!!!",
+                            Toast.LENGTH_LONG
+                        ).show()
+                        openHome()
+                    } else {
+                        Toast.makeText(
+                            activity,
+                            "Usuário ou senha inválidos",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                }
+        }
+    }
+
+    private fun openHome(){
+        val intent=Intent(activity, MainActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        intent.putExtra("userLogged", true)
         startActivity(intent)
     }
 }

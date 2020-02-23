@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "832674468903",
+    "firebase_url": "https://movie-db-dfa78.firebaseio.com",
+    "project_id": "movie-db-dfa78",
+    "storage_bucket": "movie-db-dfa78.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:832674468903:android:3c31c7d60d0ba736faea02",
+        "android_client_info": {
+          "package_name": "com.thalita.movie_db_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "832674468903-p1kt1pkjcfg2bvjbdp2npai6oajttlkc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.thalita.movie_db_app",
+            "certificate_hash": "866cdd98ea80ff21c6a3a6128b23868b2c1bc0a5"
+          }
+        },
+        {
+          "client_id": "832674468903-esbkf6odptq32iqa76sd8orr23ekmmfb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAyM4dpVcjPJh6yYlxQ5Ro-L0hgIMmJpC8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "832674468903-esbkf6odptq32iqa76sd8orr23ekmmfb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
