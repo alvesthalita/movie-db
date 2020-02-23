@@ -8,8 +8,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
 import com.beardedhen.androidbootstrap.BootstrapButton
 import com.beardedhen.androidbootstrap.BootstrapEditText
 import com.google.firebase.auth.FirebaseAuth
@@ -29,9 +27,6 @@ class LoginFragment : Fragment() {
     private var databaseReference: DatabaseReference? = null
     private var firebaseAuth: FirebaseAuth? = null
     private var user: User? = null
-    private val fm: FragmentManager? = null
-    private var ft: FragmentTransaction? = null
-
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
 
