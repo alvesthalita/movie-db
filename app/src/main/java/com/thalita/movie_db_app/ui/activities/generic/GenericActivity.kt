@@ -68,7 +68,7 @@ abstract class GenericActivity : AppCompatActivity(){
             )
         }
 
-        Objects.requireNonNull(supportActionBar)!!.hide()
+        Objects.requireNonNull(supportActionBar)?.hide()
     }
 
     fun replaceFragment(fragment: Fragment) {
