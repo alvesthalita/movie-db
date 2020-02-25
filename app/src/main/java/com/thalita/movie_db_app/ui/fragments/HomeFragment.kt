@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
@@ -20,6 +22,8 @@ class HomeFragment : Fragment() {
     private lateinit var myListBtn: LinearLayout
     private lateinit var watchedBtn: LinearLayout
     private lateinit var settingsBtn: LinearLayout
+    private lateinit var imgHome: ImageView
+    private lateinit var tvHome: TextView
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
 
@@ -43,6 +47,9 @@ class HomeFragment : Fragment() {
         myListBtn = view.findViewById(R.id.linear_mylist_btn)
         watchedBtn = view.findViewById(R.id.linear_watched_btn)
         settingsBtn = view.findViewById(R.id.linear_settings_btn)
+
+        imgHome = view.findViewById(R.id.image_home)
+        tvHome = view.findViewById(R.id.tv_home)
 
         initActions()
     }

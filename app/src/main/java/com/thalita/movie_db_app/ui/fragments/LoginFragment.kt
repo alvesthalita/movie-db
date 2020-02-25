@@ -36,13 +36,11 @@ class LoginFragment : Fragment() {
     private var userAuth: UserAuth?=null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-
         val view: View = inflater.inflate(
             R.layout.fragment_login, container,
             false)
 
         initComponent(view)
-
         return view
     }
 
@@ -52,7 +50,6 @@ class LoginFragment : Fragment() {
     }
 
     fun initComponent(view: View){
-
         (activity as AppCompatActivity?)!!.supportActionBar!!.hide()
         edt_login = view.findViewById(R.id.edt_login_email)
         edt_password = view.findViewById(R.id.edt_login_password)

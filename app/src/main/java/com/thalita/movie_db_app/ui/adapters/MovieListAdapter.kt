@@ -33,7 +33,7 @@ class MovieListAdapter(private var context: Context, private var movieList: Arra
 
         val aq = AQuery(convertView)
         val item: MovieResult.MovieResponse = movieList[position]
-        aq.id(R.id.tv_movie_title).text(item.original_title)
+        aq.id(R.id.tv_movie_title).text(item.title)
         return convertView!!
     }
 }

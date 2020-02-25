@@ -12,11 +12,10 @@
         android:orientation="horizontal">
 
         <com.beardedhen.androidbootstrap.BootstrapEditText
-            android:id="@+id/edt_login_password"
+            android:id="@+id/edt_search"
             android:layout_width="330dp"
             android:layout_height="wrap_content"
             android:hint="Pesquisar"
-            android:inputType="textPassword"
             android:layout_marginTop="10dp"
             android:layout_marginStart="10dp"
             app:bootstrapSize="md"
@@ -24,6 +23,7 @@
             app:roundedCorners="true"/>
 
         <LinearLayout
+            android:id="@+id/linear_search"
             android:layout_width="60dp"
             android:layout_height="50dp"
             android:gravity="center">

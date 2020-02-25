@@ -20,4 +20,10 @@
     <string name="title_recover_password">Recuperar Senha</string>
     <string name="title_cancel">Cancelar</string>
     <string name="title_send">Enviar</string>
+    <string name="title_title">Título</string>
+    <string name="title_release_date">Data de lançamento</string>
+    <string name="title_language">Idioma</string>
+    <string name="title_average">Nota</string>
+    <string name="title_popular">Popularidade</string>
+    <string name="title_sinopse">Sinopse</string>
 </resources>
