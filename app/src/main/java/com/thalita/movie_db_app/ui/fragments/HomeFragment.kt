@@ -19,6 +19,7 @@ class HomeFragment : Fragment() {
     private lateinit var homeBtn: LinearLayout
     private lateinit var myListBtn: LinearLayout
     private lateinit var watchedBtn: LinearLayout
+    private lateinit var settingsBtn: LinearLayout
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
 
@@ -41,6 +42,7 @@ class HomeFragment : Fragment() {
         homeBtn = view.findViewById(R.id.linear_home_btn)
         myListBtn = view.findViewById(R.id.linear_mylist_btn)
         watchedBtn = view.findViewById(R.id.linear_watched_btn)
+        settingsBtn = view.findViewById(R.id.linear_settings_btn)
 
         initActions()
     }
@@ -58,6 +60,10 @@ class HomeFragment : Fragment() {
 
         watchedBtn.setOnClickListener {
             viewPager.currentItem = 2
+        }
+
+        settingsBtn.setOnClickListener {
+            viewPager.currentItem = 3
         }
     }
 

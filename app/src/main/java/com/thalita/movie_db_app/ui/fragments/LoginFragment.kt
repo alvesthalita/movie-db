@@ -20,6 +20,7 @@ import com.thalita.movie_db_app.ui.activities.MainActivity
 import com.thalita.movie_db_app.ui.activities.RecoverPasswordActivity
 import com.thalita.movie_db_app.ui.activities.SignInActivity
 import com.thalita.movie_db_app.utils.ConfigFirebase
+import com.thalita.movie_db_app.utils.UserAuth
 import com.thalita.movie_db_app.utils.ValidateInput
 
 class LoginFragment : Fragment() {
@@ -32,6 +33,7 @@ class LoginFragment : Fragment() {
     private var databaseReference: DatabaseReference? = null
     private var firebaseAuth: FirebaseAuth? = null
     private var user: User? = null
+    private var userAuth: UserAuth?=null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
 
@@ -61,6 +63,7 @@ class LoginFragment : Fragment() {
         databaseReference = FirebaseDatabase.getInstance().reference
         firebaseAuth = ConfigFirebase().getFirebaseAuth()
         user = User()
+        userAuth = activity?.let { UserAuth(it) }
 
         initActions()
     }
@@ -125,15 +128,11 @@ class LoginFragment : Fragment() {
             firebaseAuth?.signInWithEmailAndPassword(it, user!!.getPassword()!!)
                 ?.addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        Toast.makeText(
-                            activity,
-                            "Login efetuado com sucesso!!!",
-                            Toast.LENGTH_LONG
-                        ).show()
+                        userAuth?.saveUser(edt_login.text.toString(), null, true)
                         openHome()
                     } else {
                         Toast.makeText(
-                            activity,
+                            context,
                             "Usuário ou senha inválidos",
                             Toast.LENGTH_LONG
                         ).show()
