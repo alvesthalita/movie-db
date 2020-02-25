@@ -23,13 +23,23 @@
                 <ImageView
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:src="@drawable/movie_icon"/>
+                    android:src="@drawable/movie_icon" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/app_name"
+                    android:gravity="center"
+                    android:textColor="@color/colorWhite"
+                    android:layout_marginTop="10sp"
+                    android:textSize="30sp"
+                    android:textStyle="bold"/>
 
                 <com.beardedhen.androidbootstrap.BootstrapEditText
                     android:id="@+id/edt_login_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="E-mail"
+                    android:hint="@string/title_email"
                     android:inputType="textEmailAddress"
                     android:layout_marginTop="30dp"
                     app:bootstrapSize="md"
@@ -41,7 +51,7 @@
                     android:id="@+id/edt_login_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Senha"
+                    android:hint="@string/title_password"
                     android:inputType="textPassword"
                     android:layout_marginTop="10dp"
                     app:bootstrapSize="md"
@@ -52,7 +62,7 @@
                     android:id="@+id/btn_login"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Acessar"
+                    android:text="@string/title_login"
                     android:layout_marginTop="30dp"
                     app:bootstrapSize="lg"
                     app:buttonMode="regular"
@@ -61,20 +71,20 @@
                     />
 
                 <TextView
-                    android:id="@+id/tv_sem_cadastro"
+                    android:id="@+id/tv_signIn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20sp"
-                    android:text="Não tem cadastro? Clique aqui"
+                    android:text="@string/title_new_user_signin"
                     android:gravity="center"
                     android:textColor="@color/colorWhite"/>
 
                 <TextView
-                    android:id="@+id/tv_senha"
+                    android:id="@+id/tv_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20sp"
-                    android:text="Esqueceu sua senha? Clique aqui"
+                    android:text="@string/title_forget_password"
                     android:gravity="center"
                     android:textColor="@color/colorWhite"/>
 

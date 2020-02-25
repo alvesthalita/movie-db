@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.thalita.movie_db_app.ui.fragments.MyListFragment
 import com.thalita.movie_db_app.ui.fragments.SearchFragment
+import com.thalita.movie_db_app.ui.fragments.SettingsFragment
 import com.thalita.movie_db_app.ui.fragments.WatchedFragment
 
 @Suppress("DEPRECATION")
@@ -20,12 +21,13 @@ class HomeViewPagerAdapter(fragmentManager: FragmentManager, private var viewPag
             0 -> SearchFragment()
             1 -> MyListFragment()
             2 -> WatchedFragment()
+            3 -> SettingsFragment()
             else -> SearchFragment()
         }
     }
 
     // 3
     override fun getCount(): Int {
-        return 3
+        return 4
     }
 }

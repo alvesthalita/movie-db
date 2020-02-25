@@ -12,19 +12,21 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:icon">
-
+        <activity android:name=".ui.activities.RecoverPasswordActivity"></activity>
+        <activity android:name=".ui.activities.SignInActivity" />
         <activity
-            android:name="com.thalita.movie_db_app.ui.activities.SplashActivity"
+            android:name=".ui.activities.SplashActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name="com.thalita.movie_db_app.ui.activities.MainActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/app_name"/>
+        <activity
+            android:name=".ui.activities.MainActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

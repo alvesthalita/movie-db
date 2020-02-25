@@ -5,8 +5,8 @@ import com.google.firebase.database.Exclude
 class User{
 
     private var email: String? = null
-    private var senha: String? = null
-    private var nome: String? = null
+    private var password: String? = null
+    private var fullName: String? = null
     private var key: String? = null
 
     fun getEmail(): String? {
@@ -18,21 +18,21 @@ class User{
     }
 
     @Exclude
-    fun getSenha(): String? {
-        return senha
+    fun getPassword(): String? {
+        return password
     }
 
     @Exclude
-    fun setSenha(senha: String?) {
-        this.senha = senha
+    fun setPassword(password: String?) {
+        this.password = password
     }
 
-    fun getNome(): String? {
-        return nome
+    fun getFullName(): String? {
+        return fullName
     }
 
-    fun setNome(nome: String?) {
-        this.nome = nome
+    fun setFullName(fullName: String?) {
+        this.fullName = fullName
     }
 
     fun getKey(): String? {

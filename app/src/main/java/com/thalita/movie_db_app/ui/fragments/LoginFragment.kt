@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -16,6 +17,8 @@ import com.google.firebase.database.FirebaseDatabase
 import com.thalita.movie_db_app.R
 import com.thalita.movie_db_app.entities.User
 import com.thalita.movie_db_app.ui.activities.MainActivity
+import com.thalita.movie_db_app.ui.activities.RecoverPasswordActivity
+import com.thalita.movie_db_app.ui.activities.SignInActivity
 import com.thalita.movie_db_app.utils.ConfigFirebase
 import com.thalita.movie_db_app.utils.ValidateInput
 
@@ -24,6 +27,8 @@ class LoginFragment : Fragment() {
     private lateinit var edt_login : BootstrapEditText
     private lateinit var edt_password : BootstrapEditText
     private lateinit var btn_login : BootstrapButton
+    private lateinit var btn_signIn : TextView
+    private lateinit var btn_recoverPassword : TextView
     private var databaseReference: DatabaseReference? = null
     private var firebaseAuth: FirebaseAuth? = null
     private var user: User? = null
@@ -50,6 +55,8 @@ class LoginFragment : Fragment() {
         edt_login = view.findViewById(R.id.edt_login_email)
         edt_password = view.findViewById(R.id.edt_login_password)
         btn_login = view.findViewById(R.id.btn_login)
+        btn_signIn = view.findViewById(R.id.tv_signIn)
+        btn_recoverPassword = view.findViewById(R.id.tv_password)
 
         databaseReference = FirebaseDatabase.getInstance().reference
         firebaseAuth = ConfigFirebase().getFirebaseAuth()
@@ -61,7 +68,21 @@ class LoginFragment : Fragment() {
     private fun initActions(){
         btn_login.setOnClickListener {
             validateFields()
+            openHome()
         }
+
+        btn_signIn.setOnClickListener {
+            val intent = Intent(activity, SignInActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
+            startActivity(intent)
+        }
+
+        btn_recoverPassword.setOnClickListener {
+            val intent = Intent(activity, RecoverPasswordActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
+            startActivity(intent)
+        }
+
     }
 
     private fun validateFields(){
@@ -98,10 +119,10 @@ class LoginFragment : Fragment() {
 
     private fun startLogin() {
         user?.setEmail(edt_login.text.toString())
-        user?.setSenha(edt_password.text.toString())
+        user?.setPassword(edt_password.text.toString())
 
         user?.getEmail()?.let {
-            firebaseAuth?.signInWithEmailAndPassword(it, user!!.getSenha()!!)
+            firebaseAuth?.signInWithEmailAndPassword(it, user!!.getPassword()!!)
                 ?.addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         Toast.makeText(
@@ -124,7 +145,6 @@ class LoginFragment : Fragment() {
     private fun openHome(){
         val intent=Intent(activity, MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        intent.putExtra("userLogged", true)
         startActivity(intent)
     }
 }

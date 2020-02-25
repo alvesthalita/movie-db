@@ -4,34 +4,34 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.content.SharedPreferences.Editor
 
-class UserAuth(private var context: Context){
+class UserAuth(context: Context){
 
-    private var sharedPreferences: SharedPreferences? = null
-    private var editor: Editor? = null
-
+    private val preferencesName = "app.preferences.movie"
+    private lateinit var editor: Editor
+    private var sharedPreferences: SharedPreferences = context.getSharedPreferences(preferencesName, Context.MODE_PRIVATE)
     private val EMAIL = "LOGGED_USER_EMAIL"
     private val PASSWORD = "LOGGED_USER_PASSWORD"
+    private val USER_LOOGED = "LOGGED_USER"
 
-    fun Preferences(context: Context) {
-        this.context = context
-        val NOME_ARQUIVO = "app.preferences"
-        sharedPreferences =
-            context.getSharedPreferences(NOME_ARQUIVO, Context.MODE_PRIVATE)
-//        editor = sharedPreferences.edit()
-    }
+    fun saveUser(email: String?, password: String?, userLogged: Boolean?) {
+        editor = sharedPreferences.edit()
 
-    fun saveUser(email: String?, password: String?) {
-        editor!!.putString(EMAIL, email)
-        editor!!.putString(PASSWORD, password)
-        editor!!.commit()
+        editor.putString(EMAIL, email)
+        editor.putString(PASSWORD, password)
+        editor.putBoolean(USER_LOOGED, userLogged!!)
+        editor.apply()
     }
 
     fun getEmail(): String? {
-        return sharedPreferences!!.getString(EMAIL, null)
+        return sharedPreferences.getString(EMAIL, null)
     }
 
     fun getPassword(): String? {
-        return sharedPreferences!!.getString(PASSWORD, null)
+        return sharedPreferences.getString(PASSWORD, null)
+    }
+    
+    fun getUserLogged(): Boolean?{
+        return sharedPreferences.getBoolean(USER_LOOGED, false)
     }
 
 }
