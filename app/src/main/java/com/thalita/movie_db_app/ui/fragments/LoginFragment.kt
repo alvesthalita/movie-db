@@ -139,7 +139,7 @@ class LoginFragment : Fragment() {
     }
 
     private fun openHome(){
-        val intent=Intent(activity, MainActivity::class.java)
+        val intent=Intent(context, MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         startActivity(intent)
     }

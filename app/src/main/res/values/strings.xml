@@ -26,4 +26,5 @@
     <string name="title_average">Nota</string>
     <string name="title_popular">Popularidade</string>
     <string name="title_sinopse">Sinopse</string>
+    <string name="title_logout">Sair</string>
 </resources>

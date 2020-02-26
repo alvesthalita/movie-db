@@ -22,6 +22,28 @@ class UserAuth(context: Context){
         editor.apply()
     }
 
+    fun logout(){
+        sharedPreferences.edit().clear().apply()
+    }
+
+//    private fun loadValues() {
+//        EMAIL = loadValue(com.hdi.segurado.utils.general.Auth.types.cpfCnpj.name)
+//        token=loadValue(com.hdi.segurado.utils.general.Auth.types.token.name)
+//        pushToken=loadValue(com.hdi.segurado.utils.general.Auth.types.pushToken.name)
+//        userName=loadValue(com.hdi.segurado.utils.general.Auth.types.userName.name)
+//        password=loadValue(com.hdi.segurado.utils.general.Auth.types.password.name)
+//        userPhoto=loadValue(com.hdi.segurado.utils.general.Auth.types.userPhoto.name)
+//        useFacebook=loadValue(com.hdi.segurado.utils.general.Auth.types.useFacebook.name)
+//    }
+//
+//    private fun loadValue(key: String): String? {
+//        return if (sharedPreferences.contains(key)) {
+////            crypto.decrypt(preferences.getString(key, ""))
+//            sharedPreferences.getString(key, "")
+//        } else null
+//    }
+
+
     fun getEmail(): String? {
         return sharedPreferences.getString(EMAIL, null)
     }
