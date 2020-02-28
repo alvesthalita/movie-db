@@ -36,7 +36,7 @@ class SettingsFragment : Fragment() {
     }
 
     private fun init(view: View){
-        btn_logout = view.findViewById(R.id.btn_logout)
+        btn_logout = view.findViewById(R.id.btn_settings_logout)
         firebaseAuth = ConfigFirebase().getFirebaseAuth()
 
         btn_logout?.setOnClickListener {

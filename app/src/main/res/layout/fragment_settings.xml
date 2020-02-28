@@ -1,22 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorAccent"
+    android:gravity="center"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.fragments.SettingsFragment">
 
-    <com.beardedhen.androidbootstrap.BootstrapButton
-        android:id="@+id/btn_logout"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/title_logout"
-        android:layout_marginTop="30dp"
-        app:bootstrapSize="lg"
-        app:bootstrapBrand="danger"
-        app:buttonMode="regular"
-        app:showOutline="false"
-        app:roundedCorners="true"
-        />
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_margin="20sp">
 
-</FrameLayout>
+        <com.beardedhen.androidbootstrap.BootstrapCircleThumbnail
+            android:id="@+id/image_settings_user"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_user"
+            app:bootstrapBrand="regular"
+            app:hasBorder="true"/>
+
+        <com.beardedhen.androidbootstrap.BootstrapEditText
+            android:id="@+id/edt_settings_fullName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:layout_marginTop="30dp"
+            app:bootstrapSize="md"
+            app:bootstrapBrand="info"
+            app:roundedCorners="true"/>
+
+        <com.beardedhen.androidbootstrap.BootstrapEditText
+            android:id="@+id/edt_setting_username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/title_username"
+            android:layout_marginTop="10dp"
+            app:bootstrapSize="md"
+            app:bootstrapBrand="info"
+            app:roundedCorners="true"/>
+
+        <com.beardedhen.androidbootstrap.BootstrapEditText
+            android:id="@+id/edt_signIn_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/title_email"
+            android:inputType="textEmailAddress"
+            android:layout_marginTop="10dp"
+            app:bootstrapSize="md"
+            app:bootstrapBrand="info"
+            app:roundedCorners="true"/>
+
+        <com.beardedhen.androidbootstrap.BootstrapButton
+            android:id="@+id/btn_settings_save"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/title_save"
+            android:layout_marginTop="30dp"
+            app:bootstrapSize="lg"
+            app:buttonMode="regular"
+            app:showOutline="false"
+            app:roundedCorners="true"/>
+
+         <com.beardedhen.androidbootstrap.BootstrapButton
+            android:id="@+id/btn_settings_logout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/title_logout"
+            android:layout_marginTop="10dp"
+            app:bootstrapSize="lg"
+            app:bootstrapBrand="danger"
+            app:buttonMode="regular"
+            app:showOutline="false"
+            app:roundedCorners="true"/>
+
+
+    </LinearLayout>
+
+
+
+</LinearLayout>

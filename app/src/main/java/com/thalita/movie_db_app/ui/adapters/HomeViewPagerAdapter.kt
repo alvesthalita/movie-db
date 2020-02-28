@@ -7,7 +7,7 @@ import androidx.viewpager.widget.ViewPager
 import com.thalita.movie_db_app.ui.fragments.MyListFragment
 import com.thalita.movie_db_app.ui.fragments.SearchFragment
 import com.thalita.movie_db_app.ui.fragments.SettingsFragment
-import com.thalita.movie_db_app.ui.fragments.WatchedFragment
+import com.thalita.movie_db_app.ui.fragments.StatisticFragment
 
 @Suppress("DEPRECATION")
 class HomeViewPagerAdapter(fragmentManager: FragmentManager, private var viewPager: ViewPager) :
@@ -20,7 +20,7 @@ class HomeViewPagerAdapter(fragmentManager: FragmentManager, private var viewPag
         return when (position) {
             0 -> SearchFragment()
             1 -> MyListFragment()
-            2 -> WatchedFragment()
+            2 -> StatisticFragment()
             3 -> SettingsFragment()
             else -> SearchFragment()
         }

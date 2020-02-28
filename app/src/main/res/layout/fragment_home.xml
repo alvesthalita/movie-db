@@ -31,13 +31,13 @@
                 android:id="@+id/image_home"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_home"/>
+                android:src="@drawable/ic_search"/>
 
             <TextView
                 android:id="@+id/tv_home"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/title_home"
+                android:text="@string/title_search"
                 android:textColor="@color/colorWhite"/>
 
         </LinearLayout>
@@ -74,12 +74,12 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_tv"/>
+                android:src="@drawable/ic_poll"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/title_watched"
+                android:text="@string/title_statistic"
                 android:textColor="@color/colorWhite"/>
 
         </LinearLayout>
