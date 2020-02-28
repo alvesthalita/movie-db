@@ -53,7 +53,7 @@ class MovieDetailsActivity : GenericActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun setMovieDetails() {
         val response: MovieResult.MovieResponse = intent.getSerializableExtra("movieDetails") as MovieResult.MovieResponse
-        val posterURL= "https://image.tmdb.org/t/p/original" + response.poster_path
+        val posterURL= "https://image.tmdb.org/t/p/w500" + response.poster_path
         val linearLayout = findViewById<LinearLayout>(R.id.linear_image)
         val imageView = ImageView(this)
 
