@@ -30,9 +30,9 @@ class MovieListAdapter(private var context: Context, private var movieList: Arra
 
         Glide.with(context).load(posterURL).into(imageView)
         view.linearLayout.addView(imageView)
-        view.movieTitle.text= movieList[position].original_title
+        view.movieTitle.text= movieList[position].title
 
-        view.linearDetails.setOnClickListener { view: View? ->
+        view.linearDetails.setOnClickListener {
             val intent = Intent(context, MovieDetailsActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
             intent.putExtra("movieDetails", movieList[position])

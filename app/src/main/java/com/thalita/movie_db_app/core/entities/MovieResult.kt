@@ -1,9 +1,10 @@
 package com.thalita.movie_db_app.core.entities
 
+import android.widget.ImageView
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
-class MovieResult {
+class MovieResult : Serializable{
     class MovieResponse : Serializable {
         @SerializedName("id")
         val id: String?=null
