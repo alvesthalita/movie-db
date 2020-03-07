@@ -5,8 +5,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.thalita.movie_db_app.ui.fragments.MyListFragment
-import com.thalita.movie_db_app.ui.fragments.SearchFragment
-import com.thalita.movie_db_app.ui.fragments.SettingsFragment
+import com.thalita.movie_db_app.ui.fragments.HomeFragment
 import com.thalita.movie_db_app.ui.fragments.StatisticFragment
 
 @Suppress("DEPRECATION")
@@ -18,11 +17,11 @@ class HomeViewPagerAdapter(fragmentManager: FragmentManager, private var viewPag
 //        viewPager.addOnPageChangeListener(pageChangeListener)
 
         return when (position) {
-            0 -> SearchFragment()
+            0 -> HomeFragment()
             1 -> MyListFragment()
             2 -> StatisticFragment()
-            3 -> SettingsFragment()
-            else -> SearchFragment()
+//            3 -> SettingsFragment()
+            else -> HomeFragment()
         }
     }
 

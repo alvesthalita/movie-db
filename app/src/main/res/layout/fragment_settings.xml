@@ -44,7 +44,7 @@
             app:roundedCorners="true"/>
 
         <com.beardedhen.androidbootstrap.BootstrapEditText
-            android:id="@+id/edt_signIn_email"
+            android:id="@+id/edt_settings_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/title_email"

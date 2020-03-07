@@ -31,4 +31,5 @@
     <string name="title_username">Username</string>
     <string name="title_search">Pesquisar</string>
     <string name="title_statistic">Estatísticas</string>
+    <string name="title_favorite">Favotitos</string>
 </resources>

@@ -1,38 +1,46 @@
 package com.thalita.movie_db_app.ui.fragments
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.viewpager.widget.ViewPager
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.thalita.movie_db_app.R
-import com.thalita.movie_db_app.ui.adapters.HomeViewPagerAdapter
+import com.thalita.movie_db_app.core.entities.MovieResult
+import com.thalita.movie_db_app.core.service.ServiceVolley
+import com.thalita.movie_db_app.interfaces.OnValidateUserEventListener
+import com.thalita.movie_db_app.ui.adapters.MovieListAdapter
 
+class HomeFragment : Fragment(), OnValidateUserEventListener {
 
-class HomeFragment : Fragment() {
-
-    private lateinit var viewPager: ViewPager
-    private lateinit var pagerAdapter: HomeViewPagerAdapter
-    private lateinit var homeBtn: LinearLayout
-    private lateinit var myListBtn: LinearLayout
-    private lateinit var watchedBtn: LinearLayout
-    private lateinit var settingsBtn: LinearLayout
-    private lateinit var imgHome: ImageView
-    private lateinit var tvHome: TextView
+    private var recyclerView: RecyclerView?=null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-
-        val view: View = inflater.inflate(
-            R.layout.fragment_home, container,
-            false)
-
-        initComponent(view)
+        val view: View = inflater.inflate(R.layout.fragment_home, container,false)
+        init(view)
         return view
+    }
+
+    @SuppressLint("WrongConstant")
+    private fun init(view: View) {
+        recyclerView = view.findViewById(R.id.recycler_view)
+
+        requestMovieList()
+    }
+
+    private fun requestMovieList() {
+//        val url = "https://api.themoviedb.org/3/movie/76341/similar?api_key=6d9583667c5dfe1cebfc99d3b6819c6b&language=pt-BR"
+        val url = "https://api.themoviedb.org/3/discover/movie?api_key=6d9583667c5dfe1cebfc99d3b6819c6b&language=pt-BR&sort_by=popularity.desc&include_adult=false&include_video=false&page=1"
+
+        val serviceMovie =
+            ServiceVolley(context, url)
+        serviceMovie.setOnValidateRequestEventListener(this)
+        serviceMovie.startRequest()
     }
 
     override fun onResume() {
@@ -40,38 +48,15 @@ class HomeFragment : Fragment() {
         (activity as AppCompatActivity).supportActionBar?.hide()
     }
 
-    fun initComponent(view: View){
-        viewPager = view.findViewById(R.id.vpPager)
-        pagerAdapter = HomeViewPagerAdapter(childFragmentManager, viewPager)
-        homeBtn = view.findViewById(R.id.linear_home_btn)
-        myListBtn = view.findViewById(R.id.linear_mylist_btn)
-        watchedBtn = view.findViewById(R.id.linear_watched_btn)
-        settingsBtn = view.findViewById(R.id.linear_settings_btn)
-
-        imgHome = view.findViewById(R.id.image_home)
-        tvHome = view.findViewById(R.id.tv_home)
-
-        initActions()
+    @SuppressLint("WrongConstant")
+    override fun onValidateRequestSuccess(result: Array<MovieResult.MovieResponse>) {
+        recyclerView?.layoutManager = GridLayoutManager(context, 3)
+        val adapter =activity?.let { MovieListAdapter(it, result) }
+        recyclerView!!.isClickable = true
+        recyclerView?.adapter = adapter
     }
 
-    private fun initActions(){
-        viewPager.adapter = pagerAdapter
-
-        homeBtn.setOnClickListener {
-            viewPager.currentItem = 0
-        }
-
-        myListBtn.setOnClickListener {
-            viewPager.currentItem = 1
-        }
-
-        watchedBtn.setOnClickListener {
-            viewPager.currentItem = 2
-        }
-
-        settingsBtn.setOnClickListener {
-            viewPager.currentItem = 3
-        }
+    override fun onValidateRequestFail(error: String?) {
+        Toast.makeText(context, error, Toast.LENGTH_LONG).show()
     }
-
 }
