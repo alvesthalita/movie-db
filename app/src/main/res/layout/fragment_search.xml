@@ -6,11 +6,29 @@
     android:layout_height="match_parent"
     android:background="@color/colorAccent">
 
-    <androidx.appcompat.widget.SearchView
+    <SearchView
         android:id="@+id/search_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:queryHint="Pesquisar"
-        android:background="@color/colorWhite"/>
+        android:background="@color/colorWhite"
+        app:closeIcon="@null"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="horizontal"
+        android:background="@color/colorAccent"/>
+
+    <ProgressBar
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        style="?android:attr/progressBarStyleLarge"
+        android:visibility="gone"
+        android:layout_gravity="center"
+        android:theme="@style/ProgressBarTheme"
+        android:id="@+id/progressBar" />
+
 
 </LinearLayout>

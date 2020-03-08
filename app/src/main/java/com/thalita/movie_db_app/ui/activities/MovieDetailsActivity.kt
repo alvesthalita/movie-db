@@ -72,7 +72,7 @@ class MovieDetailsActivity : GenericActivity() {
         linearLayout.addView(imageView)
 
         movieTitle.text = response!!.title
-        movieDateRelease.text =DateUtils().stringToDate(response!!.release_date).toString()
+//        movieDateRelease.text =DateUtils().stringToDate(response!!.release_date).toString()
 
         if(response!!.original_language == "en"){
             movieLanguage.text = "Inglês"
@@ -107,7 +107,7 @@ class MovieDetailsActivity : GenericActivity() {
         } catch (e: java.lang.Exception) {
             Toast.makeText(
                 applicationContext,
-                "Não foi possível realizar o cadastro, tente novamente mais tarde",
+                "Não foi possível incluir na sua lista, tente novamente mais tarde",
                 Toast.LENGTH_LONG
             ).show()
             e.printStackTrace()

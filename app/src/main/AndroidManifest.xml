@@ -15,7 +15,7 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:icon">
-        <activity android:name=".ui.activities.WatchedActivity"></activity>
+        <activity android:name=".ui.activities.WatchedActivity" />
         <activity android:name=".ui.activities.MyListActivity" />
         <activity android:name=".ui.activities.MovieDetailsActivity" />
         <activity android:name=".ui.activities.RecoverPasswordActivity" />
