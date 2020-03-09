@@ -1,10 +1,20 @@
 package com.thalita.movie_db_app.entities
 
-class FavoriteMovie {
+import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
+class FavoriteMovie : Serializable{
+
+    @SerializedName("email")
     private var email: String? = null
+
+    @SerializedName("titleMovie")
     private var titleMovie: String? = null
+
+    @SerializedName("posterPath")
     private var posterPath: String? = null
+
+    @SerializedName("movieID")
     private var movieID: Int? = null
 
     fun getEmail(): String? {
@@ -38,4 +48,6 @@ class FavoriteMovie {
     fun setMovieID(movieID: Int?) {
         this.movieID = movieID
     }
+
+    var response: FavoriteMovie?=null
 }
