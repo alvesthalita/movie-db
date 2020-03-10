@@ -41,6 +41,8 @@ class SearchFragment : Fragment(), OnValidateUserEventListener {
     }
 
     private fun search(){
+        searchView?.isIconified=false
+
         searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
 
             override fun onQueryTextChange(newText: String): Boolean {
@@ -53,13 +55,17 @@ class SearchFragment : Fragment(), OnValidateUserEventListener {
                 return false
             }
         })
+
+        searchView?.setOnCloseListener(SearchView.OnCloseListener {
+            // limpar lista
+            searchView?.isIconified=false
+            false
+        })
     }
 
     private fun searchMovie(movieTitle: String) {
         val url = "https://api.themoviedb.org/3/search/movie?api_key=6d9583667c5dfe1cebfc99d3b6819c6b&language=pt-BR&query=" + movieTitle + "&page=1&include_adult=false"
-
-        val serviceMovie =
-            ServiceVolley(context, url)
+        val serviceMovie = ServiceVolley(context, url)
         serviceMovie.setOnValidateRequestEventListener(this)
         serviceMovie.startRequest()
     }
