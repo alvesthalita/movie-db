@@ -4,10 +4,7 @@ import android.view.View
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.thalita.movie_db_app.R
 import com.thalita.movie_db_app.ui.activities.generic.GenericActivity
-import com.thalita.movie_db_app.ui.fragments.HomeFragment
-import com.thalita.movie_db_app.ui.fragments.LoginFragment
-import com.thalita.movie_db_app.ui.fragments.MyListFragment
-import com.thalita.movie_db_app.ui.fragments.SearchFragment
+import com.thalita.movie_db_app.ui.fragments.*
 import com.thalita.movie_db_app.utils.UserAuth
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -37,7 +34,7 @@ class MainActivity : GenericActivity() {
         if(userAuth!!.getUserLogged()!!){
             loadFragment(item.itemId)
         }else {
-            navigationView?.visibility = View.GONE;
+            navigationView?.visibility = View.GONE
             replaceFragment(LoginFragment())
         }
         true
@@ -59,7 +56,7 @@ class MainActivity : GenericActivity() {
             }
 
             R.id.nav_setting -> {
-                replaceFragment(MyListFragment())
+                replaceFragment(ProfileFragment())
             }
         }
     }

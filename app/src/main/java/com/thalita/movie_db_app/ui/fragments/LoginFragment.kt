@@ -68,7 +68,6 @@ class LoginFragment : Fragment() {
     private fun initActions(){
         btn_login.setOnClickListener {
             validateFields()
-            openHome()
         }
 
         btn_signIn.setOnClickListener {
@@ -82,11 +81,9 @@ class LoginFragment : Fragment() {
             intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
             startActivity(intent)
         }
-
     }
 
     private fun validateFields(){
-
         if(edt_login.text.isEmpty()){
             Toast.makeText(
                 activity,
@@ -139,7 +136,7 @@ class LoginFragment : Fragment() {
     }
 
     private fun openHome(){
-        val intent=Intent(activity, MainActivity::class.java)
+        val intent=Intent(context, MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         startActivity(intent)
     }

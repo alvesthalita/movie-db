@@ -1,8 +1,6 @@
 package com.thalita.movie_db_app.ui.activities
 
-import android.annotation.SuppressLint
 import android.content.Intent
-import android.os.Build
 import android.widget.Toast
 import com.beardedhen.androidbootstrap.BootstrapButton
 import com.beardedhen.androidbootstrap.BootstrapEditText
@@ -28,7 +26,6 @@ class SignInActivity : GenericActivity() {
     private var btn_signIn: BootstrapButton?=null
     private var btn_cancel: BootstrapButton?=null
     private var firebaseAuth: FirebaseAuth?=null
-    private val firebaseDatabase: FirebaseDatabase?=null
     private var databaseReference: DatabaseReference?=null
     private var user: User?=null
     private var userAuth: UserAuth?=null
@@ -132,7 +129,6 @@ class SignInActivity : GenericActivity() {
 
     }
 
-    @SuppressLint("ObsoleteSdkInt")
     private fun signInNewUser(){
         firebaseAuth!!.createUserWithEmailAndPassword(user!!.getEmail()!!, user!!.getPassword()!!)
             .addOnCompleteListener(
@@ -146,9 +142,7 @@ class SignInActivity : GenericActivity() {
                 } else {
                     var error=""
                     try {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                            throw task.exception!!
-                        }
+                        throw task.exception!!
                     } catch (e: FirebaseAuthWeakPasswordException) {
                         error = "Digite uma senha mais forte, com letras e números"
                     } catch (e: FirebaseAuthInvalidCredentialsException) {
