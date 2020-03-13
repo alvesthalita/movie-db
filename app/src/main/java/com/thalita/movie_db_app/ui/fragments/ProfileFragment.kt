@@ -1,9 +1,12 @@
 package com.thalita.movie_db_app.ui.fragments
 
-import android.Manifest.permission.CAMERA
-import android.content.ContentValues.TAG
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.media.MediaScannerConnection
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
@@ -14,8 +17,11 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.beardedhen.androidbootstrap.BootstrapButton
+import com.beardedhen.androidbootstrap.BootstrapCircleThumbnail
 import com.beardedhen.androidbootstrap.BootstrapEditText
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
@@ -28,6 +34,11 @@ import com.thalita.movie_db_app.utils.ConfigFirebase
 import com.thalita.movie_db_app.utils.LoadingProgressBar
 import com.thalita.movie_db_app.utils.UserAuth
 import com.thalita.movie_db_app.utils.ValidateInput
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
+import java.util.*
 
 class ProfileFragment : Fragment() {
 
@@ -45,6 +56,11 @@ class ProfileFragment : Fragment() {
     private var firebaseAuth: FirebaseAuth?=null
     private var key: String?=null
     private var fullName: String?=null
+    private var image_user: BootstrapCircleThumbnail?=null
+    private val GALLERY = 1
+    private val CAMERA = 2
+    private val TAG = "PermissionDemo"
+    private val CAMERA_REQUEST_CODE = 200
 
     override fun onCreateView( inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val view: View=inflater.inflate(R.layout.fragment_profile, container, false)
@@ -65,6 +81,7 @@ class ProfileFragment : Fragment() {
         scrollView = view.findViewById(R.id.scrollView)
         btnEdit = view.findViewById(R.id.btn_profile_edit)
         btnLogOut = view.findViewById(R.id.btn_profile_logout)
+        image_user = view.findViewById(R.id.image_profile_user)
 
 //        FirebaseApp.initializeApp(context!!)
         auth = UserAuth(activity!!)
@@ -86,6 +103,10 @@ class ProfileFragment : Fragment() {
 
         btnLogOut?.setOnClickListener {
             logout()
+        }
+
+        image_user?.setOnClickListener {
+            showPictureDialog()
         }
     }
 
@@ -214,69 +235,112 @@ class ProfileFragment : Fragment() {
     }
 
     private fun showPictureDialog() {
-        val pictureDialog = AlertDialog.Builder(this)
+        val pictureDialog = AlertDialog.Builder(context!!)
         pictureDialog.setTitle("Foto de perfil")
         val pictureDialogItems = arrayOf("Galeria", "Câmera", "Sair")
-        pictureDialog.setItems(pictureDialogItems
-        ) { dialog, which ->
+        pictureDialog.setItems(pictureDialogItems) { _, which ->
             when (which) {
-                0 -> choosePhotoFromGallary()
+                0 -> choosePhotoFromGallery()
                 1 -> takePhotoFromCamera()
+                2 -> out()
             }
         }
         pictureDialog.show()
     }
 
-    fun choosePhotoFromGallary() {
-        val galleryIntent = Intent(Intent.ACTION_PICK,
-            MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-
+    private fun choosePhotoFromGallery() {
+        val galleryIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         startActivityForResult(galleryIntent, GALLERY)
     }
 
     private fun takePhotoFromCamera() {
-        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        startActivityForResult(intent, CAMERA)
+        if(setupPermissions()) {
+            val intent=Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            startActivityForResult(intent, CAMERA)
+        }else{
+            makeRequest()
+        }
     }
 
-    public override fun onActivityResult(requestCode:Int, resultCode:Int, data: Intent?) {
+    private fun out(){
+        //sair
+    }
 
+    override fun onActivityResult(requestCode:Int, resultCode:Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        /* if (resultCode == this.RESULT_CANCELED)
-         {
-         return
-         }*/
-        if (requestCode == GALLERY)
-        {
-            if (data != null)
-            {
-                val contentURI = data!!.data
-                try
-                {
-                    val bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, contentURI)
+        if (requestCode == GALLERY) {
+            if (data != null) {
+                val contentURI = data.data
+                try {
+                    val bitmap = MediaStore.Images.Media.getBitmap(activity?.contentResolver, contentURI)
                     val path = saveImage(bitmap)
-                    Toast.makeText(this@MainActivity, "Image Saved!", Toast.LENGTH_SHORT).show()
-                    imageview!!.setImageBitmap(bitmap)
+                    Toast.makeText(context, "Image Saved!", Toast.LENGTH_SHORT).show()
+                    image_user!!.setImageBitmap(bitmap)
 
-                }
-                catch (e: IOException) {
+                } catch (e: IOException) {
                     e.printStackTrace()
-                    Toast.makeText(this@MainActivity, "Failed!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Failed!", Toast.LENGTH_SHORT).show()
                 }
-
             }
-
-        }
-        else if (requestCode == CAMERA)
-        {
+        } else if (requestCode == CAMERA) {
             val thumbnail = data!!.extras!!.get("data") as Bitmap
-            imageview!!.setImageBitmap(thumbnail)
+            image_user!!.setImageBitmap(thumbnail)
             saveImage(thumbnail)
-            Toast.makeText(this@MainActivity, "Image Saved!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Image Saved!", Toast.LENGTH_SHORT).show()
         }
     }
 
+    private fun saveImage(myBitmap: Bitmap):String {
+        val bytes = ByteArrayOutputStream()
+        myBitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes)
+        val wallpaperDirectory = File((Environment.getExternalStorageDirectory()).toString() + IMAGE_DIRECTORY)
+        // have the object build the directory structure, if needed.
+        Log.d("fee",wallpaperDirectory.toString())
 
+        if (!wallpaperDirectory.exists()) {
+            wallpaperDirectory.mkdirs()
+        }
 
+        try {
+            Log.d("heel",wallpaperDirectory.toString())
+            val f = File(wallpaperDirectory, ((Calendar.getInstance()
+                .timeInMillis).toString() + ".jpg"))
+            f.createNewFile()
+            val fo = FileOutputStream(f)
+            fo.write(bytes.toByteArray())
+            MediaScannerConnection.scanFile(context,
+                arrayOf(f.path),
+                arrayOf("image/jpeg"), null)
+            fo.close()
+            Log.d("TAG", "File Saved::--->" + f.absolutePath)
+
+            return f.absolutePath
+        } catch (e1: IOException) {
+            e1.printStackTrace()
+        }
+
+        return ""
+    }
+
+    companion object {
+        private const val IMAGE_DIRECTORY = "/movie-db"
+    }
+
+    private fun setupPermissions() : Boolean {
+        val permission = ContextCompat.checkSelfPermission(context!!,
+            Manifest.permission.CAMERA)
+
+        return if (permission != PackageManager.PERMISSION_GRANTED) {
+            Log.i(TAG, "Permission to camera denied")
+            makeRequest()
+            false
+        }else{
+            true
+        }
+    }
+
+    private fun makeRequest() {
+        ActivityCompat.requestPermissions(activity!!, arrayOf(Manifest.permission.CAMERA), CAMERA_REQUEST_CODE)
+    }
 
 }
