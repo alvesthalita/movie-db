@@ -6,6 +6,7 @@ class FavoriteMovie {
     private var titleMovie: String? = null
     private var posterPath: String? = null
     private var movieID: Int? = null
+    private var watchedMovie: Boolean? = null
 
     fun getEmail(): String? {
         return email
@@ -37,5 +38,13 @@ class FavoriteMovie {
 
     fun setMovieID(movieID: Int?) {
         this.movieID = movieID
+    }
+
+    fun getWatchedMovie(): Boolean? {
+        return watchedMovie
+    }
+
+    fun setWatchedMovie(watchedMovie: Boolean?) {
+        this.watchedMovie = watchedMovie
     }
 }
