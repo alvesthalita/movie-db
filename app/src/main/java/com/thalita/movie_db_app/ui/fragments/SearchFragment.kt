@@ -17,12 +17,12 @@ import com.thalita.movie_db_app.interfaces.OnValidateUserEventListener
 import com.thalita.movie_db_app.ui.adapters.MovieListAdapter
 import com.thalita.movie_db_app.utils.LoadingProgressBar
 
-
 class SearchFragment : Fragment(), OnValidateUserEventListener {
 
     private var searchView: SearchView?=null
     private var recyclerView: RecyclerView?=null
     private var loadingProgressBar: LoadingProgressBar?=null
+    private var adapter: MovieListAdapter?=null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val view: View = inflater.inflate(R.layout.fragment_search, container,false)
@@ -41,10 +41,9 @@ class SearchFragment : Fragment(), OnValidateUserEventListener {
     }
 
     private fun search(){
-        searchView?.isIconified=false
+        searchView?.isIconified=false //Show the keyboard when the screen is open
 
         searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-
             override fun onQueryTextChange(newText: String): Boolean {
                 return false
             }
@@ -57,9 +56,9 @@ class SearchFragment : Fragment(), OnValidateUserEventListener {
         })
 
         searchView?.setOnCloseListener(SearchView.OnCloseListener {
-            // limpar lista
+            adapter?.clearSearch()
             searchView?.isIconified=false
-            false
+            true
         })
     }
 
@@ -78,7 +77,7 @@ class SearchFragment : Fragment(), OnValidateUserEventListener {
     override fun onValidateRequestSuccess(result: Array<MovieResult.MovieResponse>) {
         loadingProgressBar!!.hidePogressBar()
         recyclerView?.layoutManager = GridLayoutManager(context, 3)
-        val adapter =activity?.let { MovieListAdapter(it, result) }
+        adapter =activity?.let { MovieListAdapter(it, result) }
         recyclerView!!.isClickable = true
         recyclerView?.adapter = adapter
     }

@@ -61,6 +61,7 @@ class ProfileFragment : Fragment() {
     private val CAMERA = 2
     private val TAG = "PermissionDemo"
     private val CAMERA_REQUEST_CODE = 200
+    private var pictureDialog: AlertDialog.Builder?=null
 
     override fun onCreateView( inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val view: View=inflater.inflate(R.layout.fragment_profile, container, false)
@@ -235,17 +236,17 @@ class ProfileFragment : Fragment() {
     }
 
     private fun showPictureDialog() {
-        val pictureDialog = AlertDialog.Builder(context!!)
-        pictureDialog.setTitle("Foto de perfil")
+        pictureDialog = AlertDialog.Builder(context!!)
+        pictureDialog?.setTitle("Foto de perfil")
         val pictureDialogItems = arrayOf("Galeria", "Câmera", "Sair")
-        pictureDialog.setItems(pictureDialogItems) { _, which ->
+        pictureDialog?.setItems(pictureDialogItems) { _, which ->
             when (which) {
                 0 -> choosePhotoFromGallery()
                 1 -> takePhotoFromCamera()
                 2 -> out()
             }
         }
-        pictureDialog.show()
+        pictureDialog?.show()
     }
 
     private fun choosePhotoFromGallery() {
@@ -263,7 +264,7 @@ class ProfileFragment : Fragment() {
     }
 
     private fun out(){
-        //sair
+        pictureDialog = AlertDialog.Builder(context!!)
     }
 
     override fun onActivityResult(requestCode:Int, resultCode:Int, data: Intent?) {
@@ -290,6 +291,8 @@ class ProfileFragment : Fragment() {
         }
     }
 
+    private var bit: Bitmap?=null
+
     private fun saveImage(myBitmap: Bitmap):String {
         val bytes = ByteArrayOutputStream()
         myBitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes)
@@ -303,14 +306,11 @@ class ProfileFragment : Fragment() {
 
         try {
             Log.d("heel",wallpaperDirectory.toString())
-            val f = File(wallpaperDirectory, ((Calendar.getInstance()
-                .timeInMillis).toString() + ".jpg"))
+            val f = File(wallpaperDirectory, ((Calendar.getInstance().timeInMillis).toString() + ".jpg"))
             f.createNewFile()
             val fo = FileOutputStream(f)
             fo.write(bytes.toByteArray())
-            MediaScannerConnection.scanFile(context,
-                arrayOf(f.path),
-                arrayOf("image/jpeg"), null)
+            MediaScannerConnection.scanFile(context, arrayOf(f.path), arrayOf("image/jpeg"), null)
             fo.close()
             Log.d("TAG", "File Saved::--->" + f.absolutePath)
 

@@ -34,7 +34,7 @@ class MainActivity : GenericActivity() {
         if(userAuth!!.getUserLogged()!!){
             loadFragment(item.itemId)
         }else {
-            navigationView?.visibility = View.GONE
+            showNavigation(false)
             replaceFragment(LoginFragment())
         }
         true
@@ -42,6 +42,7 @@ class MainActivity : GenericActivity() {
 
     private fun loadFragment(itemId: Int) {
         val tag = itemId.toString()
+        showNavigation(true)
         supportFragmentManager.findFragmentByTag(tag) ?: when (itemId) {
             R.id.nav_home -> {
                 replaceFragment(HomeFragment())
@@ -63,5 +64,13 @@ class MainActivity : GenericActivity() {
 
     companion object {
         const val PARAM_NAVIGATION_ID = "navigation_id"
+    }
+
+    private fun showNavigation(show: Boolean) {
+        if(show){
+            navigationView?.visibility = View.VISIBLE
+        }else{
+            navigationView?.visibility = View.GONE
+        }
     }
 }

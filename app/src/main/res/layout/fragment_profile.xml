@@ -35,7 +35,7 @@
                 android:id="@+id/image_profile_user"
                 android:src="@drawable/ic_user"
                 app:hasBorder="true"
-                app:bootstrapBrand="info" />
+                app:bootstrapBrand="secondary" />
 
             <TextView
                 android:id="@+id/tv_profile_fullName"

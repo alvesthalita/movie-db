@@ -17,12 +17,18 @@ import com.thalita.movie_db_app.ui.activities.MovieDetailsActivity
 
 class MovieListAdapter(private var context: Context, private var movieList: Array<MovieResult.MovieResponse>) : RecyclerView.Adapter<MovieListAdapter.ViewHolder>() {
 
+    private var arrayList: ArrayList<MovieResult.MovieResponse>?=null
+    private var clearList: Boolean = false
+
     override fun onCreateViewHolder(view: ViewGroup, position: Int): ViewHolder {
         val v = LayoutInflater.from(view.context).inflate(R.layout.cards_layout, view, false)
         return ViewHolder(v)
     }
     override fun getItemCount(): Int {
-        return movieList.size
+        return if(clearList && arrayList!!.size == 0)
+            arrayList!!.size
+        else
+            movieList.size
     }
     override fun onBindViewHolder(view: ViewHolder, position: Int) {
         val posterURL= "https://image.tmdb.org/t/p/original" + movieList[position].poster_path
@@ -44,5 +50,12 @@ class MovieListAdapter(private var context: Context, private var movieList: Arra
         val linearLayout: LinearLayout= itemView.findViewById(R.id.linear_image)
         val linearDetails: LinearLayout= itemView.findViewById(R.id.linear_details)
         val movieTitle: TextView= itemView.findViewById(R.id.movieTitle)
+    }
+
+    fun clearSearch(){
+        clearList = true
+        arrayList = movieList.toCollection(ArrayList())
+        arrayList?.clear()
+        notifyDataSetChanged()
     }
 }

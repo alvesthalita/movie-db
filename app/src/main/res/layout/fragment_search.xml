@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:background="@color/colorWhite"
         android:queryHint="Pesquisar"
-        android:showAsAction="always"
+        android:showAsAction="ifRoom|always"
         app:closeIcon="@null" />
 
     <androidx.recyclerview.widget.RecyclerView
@@ -25,6 +25,7 @@
     <ProgressBar
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:layout_marginTop="30dp"
         style="?android:attr/progressBarStyleLarge"
         android:visibility="gone"
         android:layout_gravity="center"
