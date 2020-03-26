@@ -12,11 +12,16 @@
         android:padding="10dp">
 
     <LinearLayout
-        android:id="@+id/linear_image"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:scaleType="fitXY"/>
+
+        <ImageView
+            android:id="@+id/image_poster_movie"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scaleType="fitXY"/>
 
         <TextView
             android:id="@+id/movieTitle"
