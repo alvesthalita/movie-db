@@ -4,13 +4,15 @@ import android.os.Build
 import android.util.Log
 import android.widget.*
 import androidx.annotation.RequiresApi
-import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.thalita.movie_db_app.R
+import com.thalita.movie_db_app.core.extension.loadFromUrl
 import com.thalita.movie_db_app.core.plataform.*
 
-
+/**
+ * Em desenvolvimento para setar os filmes como favoritos e assistidos
+ */
 class MovieDetailsActivity : BaseActivity() {
 
     private lateinit var movieTitle: TextView
@@ -25,6 +27,7 @@ class MovieDetailsActivity : BaseActivity() {
     private lateinit var info: FavoriteMovie
     private lateinit var scrollView: ScrollView
     private lateinit var progressBar: LoadingProgressBar
+    private lateinit var imagePoster: ImageView
     private var response: MovieResult.MovieResponse?= null
     private var databaseReference: DatabaseReference?=null
     private var userAuth: UserAuth?=null
@@ -58,8 +61,8 @@ class MovieDetailsActivity : BaseActivity() {
         watchedMovie = findViewById(R.id.checkbox_watched)
         closeDetails = findViewById(R.id.iv_details_close)
         scrollView = findViewById(R.id.scroll_details_movie)
+        imagePoster = findViewById(R.id.image_poster_movie)
 
-//        progressBar = LoadingProgressBar()
         favorite =FavoriteMovie()
         userAuth =UserAuth(this)
         firebaseAuth = ConfigFirebase().getFirebaseAuth()
@@ -67,8 +70,8 @@ class MovieDetailsActivity : BaseActivity() {
 
         loadInformations()
         setMovieDetails()
-        setMovieAsFavorite()
-        setMovieAsWatched()
+//        setMovieAsFavorite()
+//        setMovieAsWatched()
         setOnClickClose()
     }
 
@@ -80,29 +83,26 @@ class MovieDetailsActivity : BaseActivity() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun setMovieDetails() {
-//        response = intent.getSerializableExtra("movieDetails") as MovieResult.MovieResponse
-        val posterURL= "https://image.tmdb.org/t/p/w500" + response!!.poster_path
-        val linearLayout = findViewById<LinearLayout>(R.id.linear_image)
-        val imageView = ImageView(this)
+        val posterURL= if (response!!.poster_path.isNullOrEmpty()) "" else "https://image.tmdb.org/t/p/w500" + response!!.poster_path
+        if (posterURL.isEmpty()) imagePoster.setImageDrawable(getDrawable(R.drawable.unavailable_photo)) else imagePoster.loadFromUrl(posterURL)
 
-        Glide.with(this).load(posterURL).into(imageView)
-        linearLayout.addView(imageView)
-
-        movieTitle.text = response!!.title
-        movieDateRelease.text = DateUtils()
-            .stringToDate(response!!.release_date)
+        movieTitle.text = if (response!!.title.isNullOrEmpty()) getString(R.string.no_content) else response!!.title
+        movieDateRelease.text = DateUtils().stringToDate(response!!.release_date)
 
         if(response!!.original_language == "en"){
             movieLanguage.text = "Inglês"
         }else{
-            movieLanguage.text = response!!.original_language
+            movieLanguage.text = if (response!!.original_language.isNullOrEmpty()) getString(R.string.no_content) else response!!.original_language
         }
 
-        movieAverage.text = response!!.vote_average
-        moviePopular.text = response!!.popularity
-        movieOverview.text = response!!.overview
+        movieAverage.text = if (response!!.vote_average.isNullOrEmpty()) getString(R.string.no_content) else response!!.vote_average
+        moviePopular.text = if (response!!.popularity.isNullOrEmpty()) getString(R.string.no_content) else response!!.popularity
+        movieOverview.text = if(response!!.overview.isNullOrEmpty()) getString(R.string.no_content) else response!!.overview
     }
 
+    /**
+     * Em desenvolvimento
+     */
     private fun setMovieAsFavorite(){
         favoriteMovie.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
@@ -116,6 +116,9 @@ class MovieDetailsActivity : BaseActivity() {
         }
     }
 
+    /**
+     * Em desenvolvimento
+     */
     private fun setMovieAsWatched(){
         watchedMovie.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
@@ -129,6 +132,9 @@ class MovieDetailsActivity : BaseActivity() {
         }
     }
 
+    /**
+     * Em desenvolvimento
+     */
     private fun saveMovie(data: FavoriteMovie): Boolean {
         return try {
             databaseReference = ConfigFirebase()
@@ -146,6 +152,9 @@ class MovieDetailsActivity : BaseActivity() {
         }
     }
 
+    /**
+     * Em desenvolvimento
+     */
     private fun loadInformations() {
         databaseReference = FirebaseDatabase.getInstance().reference
         databaseReference!!.child("favorites").orderByChild("email").equalTo("thalita@gmail.com")

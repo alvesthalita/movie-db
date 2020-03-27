@@ -4,8 +4,12 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.media.MediaScannerConnection
+import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
+import android.text.Html
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +19,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -32,7 +37,15 @@ import com.thalita.movie_db_app.core.plataform.UserAuth
 import com.thalita.movie_db_app.core.plataform.ValidateInput
 import com.thalita.movie_db_app.features.main.MainActivity
 import com.thalita.movie_db_app.features.signin.SignUpUser
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
+import java.util.*
 
+/**
+ * Em desenvolvimento
+ */
 class ProfileFragment : Fragment() {
 
     private var databaseReference: DatabaseReference?=null
@@ -55,6 +68,7 @@ class ProfileFragment : Fragment() {
     private val TAG = "PermissionDemo"
     private val CAMERA_REQUEST_CODE = 200
     private var pictureDialog: AlertDialog.Builder?=null
+    private var edit_photo: TextView?=null
 
     override fun onCreateView( inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val view: View=inflater.inflate(R.layout.fragment_profile, container, false)
@@ -76,12 +90,12 @@ class ProfileFragment : Fragment() {
         btnEdit = view.findViewById(R.id.btn_profile_edit)
         btnLogOut = view.findViewById(R.id.btn_profile_logout)
         image_user = view.findViewById(R.id.image_profile_user)
+        edit_photo = view.findViewById(R.id.tv_edit_photo)
 
 //        FirebaseApp.initializeApp(context!!)
         auth =UserAuth(activity!!)
         userProfile =SignUpUser()
-        loadingProgressBar=
-            LoadingProgressBar(view)
+        loadingProgressBar=  LoadingProgressBar(view)
         firebaseAuth = ConfigFirebase().getFirebaseAuth()
         databaseReference=FirebaseDatabase.getInstance().reference
 
@@ -90,10 +104,10 @@ class ProfileFragment : Fragment() {
     }
 
     private fun initActions(){
+        underlineText()
+
         btnEdit?.setOnClickListener {
-//            validateFields()
-//            updateProfile()
-            updateEmail()
+            validateFields()
         }
 
         btnLogOut?.setOnClickListener {
@@ -102,6 +116,17 @@ class ProfileFragment : Fragment() {
 
         image_user?.setOnClickListener {
             showPictureDialog()
+        }
+
+        edit_photo?.setOnClickListener {
+            showPictureDialog()
+        }
+    }
+
+    private fun underlineText() {
+        val text= "<u><b>Editar Foto</b></u>"
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            edit_photo?.text=Html.fromHtml(text, Html.FROM_HTML_MODE_LEGACY)
         }
     }
 
@@ -171,15 +196,15 @@ class ProfileFragment : Fragment() {
             // Name, email address, and profile photo Url
             val name = user.displayName
             val email = user.email
-            val photoUrl = user.photoUrl
+//            val photoUrl = user.photoUrl
 
             // Check if user's email is verified
-            val emailVerified = user.isEmailVerified
+//            val emailVerified = user.isEmailVerified
 
             // The user's ID, unique to the Firebase project. Do NOT use this value to
             // authenticate with your backend server, if you have one. Use
             // FirebaseUser.getToken() instead.
-            val uid = user.uid
+//            val uid = user.uid
 
             //Set the name on the fields
             tv_fullName?.text = name
@@ -206,14 +231,19 @@ class ProfileFragment : Fragment() {
     }
 
     private fun updateEmail() {
-        val user = FirebaseAuth.getInstance().currentUser
-
-        user?.updateEmail(edt_email?.text.toString())
-            ?.addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    Log.d(TAG, "User email address updated.")
-                }
-            }
+        Toast.makeText(
+            activity,
+            "Em Desenvolvimento",
+            Toast.LENGTH_LONG
+        ).show()
+//        val user = FirebaseAuth.getInstance().currentUser
+//
+//        user?.updateEmail(edt_email?.text.toString())
+//            ?.addOnCompleteListener { task ->
+//                if (task.isSuccessful) {
+//                    Log.d(TAG, "User email address updated.")
+//                }
+//            }
     }
 
     private fun updatePassword() {
@@ -233,7 +263,7 @@ class ProfileFragment : Fragment() {
     private fun showPictureDialog() {
         pictureDialog = AlertDialog.Builder(context!!)
         pictureDialog?.setTitle("Foto de perfil")
-        val pictureDialogItems = arrayOf("Galeria", "Câmera", "Sair")
+        val pictureDialogItems = arrayOf("Galeria", "Câmera", "Cancelar")
         pictureDialog?.setItems(pictureDialogItems) { _, which ->
             when (which) {
                 0 -> choosePhotoFromGallery()
@@ -260,62 +290,63 @@ class ProfileFragment : Fragment() {
 
     private fun out(){
         pictureDialog = AlertDialog.Builder(context!!)
+        image_user?.setImageDrawable(AppCompatResources.getDrawable(activity!!, R.drawable.ic_user))
     }
 
     override fun onActivityResult(requestCode:Int, resultCode:Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-//        if (requestCode == GALLERY) {
-//            if (data != null) {
-//                val contentURI = data.data
-//                try {
-//                    val bitmap = MediaStore.Images.Media.getBitmap(activity?.contentResolver, contentURI)
-//                    val path = saveImage(bitmap)
-//                    Toast.makeText(context, "Image Saved!", Toast.LENGTH_SHORT).show()
-//                    image_user!!.setImageBitmap(bitmap)
-//
-//                } catch (e: IOException) {
-//                    e.printStackTrace()
-//                    Toast.makeText(context, "Failed!", Toast.LENGTH_SHORT).show()
-//                }
-//            }
-//        } else if (requestCode == CAMERA) {
-//            val thumbnail = data!!.extras!!.get("data") as Bitmap
-//            image_user!!.setImageBitmap(thumbnail)
-//            saveImage(thumbnail)
-//            Toast.makeText(context, "Image Saved!", Toast.LENGTH_SHORT).show()
-//        }
+        if (requestCode == GALLERY) {
+            if (data != null) {
+                val contentURI = data.data
+                try {
+                    val bitmap = MediaStore.Images.Media.getBitmap(activity?.contentResolver, contentURI)
+                    val path = saveImage(bitmap)
+                    Toast.makeText(context, "Image Saved!", Toast.LENGTH_SHORT).show()
+                    image_user!!.setImageBitmap(bitmap)
+
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                    Toast.makeText(context, "Failed!", Toast.LENGTH_SHORT).show()
+                }
+            }
+        } else if (requestCode == CAMERA) {
+            val thumbnail = data!!.extras!!.get("data") as Bitmap
+            image_user!!.setImageBitmap(thumbnail)
+            saveImage(thumbnail)
+            Toast.makeText(context, "Image Saved!", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private var bit: Bitmap?=null
 
-//    private fun saveImage(myBitmap: Bitmap):String {
-//        val bytes = ByteArrayOutputStream()
-//        myBitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes)
-//        val wallpaperDirectory = File((Environment.getExternalStorageDirectory()).toString() + IMAGE_DIRECTORY)
-//        // have the object build the directory structure, if needed.
-//        Log.d("fee",wallpaperDirectory.toString())
-//
-//        if (!wallpaperDirectory.exists()) {
-//            wallpaperDirectory.mkdirs()
-//        }
-//
-//        try {
-//            Log.d("heel",wallpaperDirectory.toString())
-//            val f = File(wallpaperDirectory, ((Calendar.getInstance().timeInMillis).toString() + ".jpg"))
-//            f.createNewFile()
-//            val fo = FileOutputStream(f)
-//            fo.write(bytes.toByteArray())
-//            MediaScannerConnection.scanFile(context, arrayOf(f.path), arrayOf("image/jpeg"), null)
-//            fo.close()
-//            Log.d("TAG", "File Saved::--->" + f.absolutePath)
-//
-//            return f.absolutePath
-//        } catch (e1: IOException) {
-//            e1.printStackTrace()
-//        }
-//
-//        return ""
-//    }
+    private fun saveImage(myBitmap: Bitmap):String {
+        val bytes = ByteArrayOutputStream()
+        myBitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes)
+        val wallpaperDirectory = File((Environment.getExternalStorageDirectory()).toString() + IMAGE_DIRECTORY)
+        // have the object build the directory structure, if needed.
+        Log.d("fee",wallpaperDirectory.toString())
+
+        if (!wallpaperDirectory.exists()) {
+            wallpaperDirectory.mkdirs()
+        }
+
+        try {
+            Log.d("heel",wallpaperDirectory.toString())
+            val f = File(wallpaperDirectory, ((Calendar.getInstance().timeInMillis).toString() + ".jpg"))
+            f.createNewFile()
+            val fo = FileOutputStream(f)
+            fo.write(bytes.toByteArray())
+            MediaScannerConnection.scanFile(context, arrayOf(f.path), arrayOf("image/jpeg"), null)
+            fo.close()
+            Log.d("TAG", "File Saved::--->" + f.absolutePath)
+
+            return f.absolutePath
+        } catch (e1: IOException) {
+            e1.printStackTrace()
+        }
+
+        return ""
+    }
 
     companion object {
         private const val IMAGE_DIRECTORY = "/movie-db"

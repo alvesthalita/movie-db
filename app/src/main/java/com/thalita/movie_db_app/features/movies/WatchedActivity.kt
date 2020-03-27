@@ -1,13 +1,23 @@
 package com.thalita.movie_db_app.features.movies
 
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
 import com.thalita.movie_db_app.R
+import com.thalita.movie_db_app.core.plataform.BaseActivity
 
-class WatchedActivity : AppCompatActivity() {
+/**
+ * Em desenvolvimento
+ */
+class WatchedActivity : BaseActivity() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun setLayout() {
+        hideTop(true)
         setContentView(R.layout.activity_watched)
+    }
+
+    override fun getObjects() {
+        //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun setObjects() {
+        //To change body of created functions use File | Settings | File Templates.
     }
 }

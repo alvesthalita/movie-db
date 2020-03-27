@@ -7,7 +7,9 @@ import com.thalita.movie_db_app.R
 import com.thalita.movie_db_app.core.plataform.BaseActivity
 import com.thalita.movie_db_app.core.plataform.UserAuth
 
-
+/**
+ * Em desenvolvimento
+ */
 class MyListActivity : BaseActivity() {
 
     private var recyclerView: RecyclerView?=null
@@ -66,11 +68,4 @@ class MyListActivity : BaseActivity() {
         recyclerView!!.isClickable = true
         recyclerView?.adapter = adapter
     }
-
-    //                        val result: FavoriteMovie?= dataSnapshot.getValue(FavoriteMovie::class.java)
-////                        val `object`=dataSnapshot.getValue(Any::class.java)
-////                        val json=Gson().toJson(`object`)
-////                        val movies: FavoriteMovieResult?= dataSnapshot.getValue(FavoriteMovieResult::class.java)
-////
-
 }

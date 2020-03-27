@@ -42,6 +42,13 @@
                     android:layout_gravity="end"
                     android:layout_margin="10dp"
                     android:src="@drawable/ic_close"/>
+
+                <ImageView
+                    android:id="@+id/image_poster_movie"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitCenter"/>
+
             </LinearLayout>
 
             <LinearLayout

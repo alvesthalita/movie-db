@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.thalita.movie_db_app.R
@@ -27,8 +28,8 @@ class MyListAdapter
         return movieList.size
     }
     override fun onBindViewHolder(view: ViewHolder, position: Int) {
-        val posterURL= "https://image.tmdb.org/t/p/original" + movieList[position].getPosterPath()
-        view.posterImage.loadFromUrl(posterURL)
+        val posterURL= if (movieList[position].getPosterPath().isNullOrEmpty()) "" else "https://image.tmdb.org/t/p/w500" + movieList[position].getPosterPath()
+        if (posterURL.isEmpty()) view.posterImage.setImageDrawable(getDrawable(context,R.drawable.ic_cloud_off)) else view.posterImage.loadFromUrl(posterURL)
         view.movieTitle.text= movieList[position].getTitleMovie()
 
 //        view.linearDetails.setOnClickListener {

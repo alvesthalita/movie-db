@@ -32,4 +32,6 @@
     <string name="title_search">Pesquisar</string>
     <string name="title_statistic">Estatísticas</string>
     <string name="title_favorite">Favotitos</string>
+    <string name="desenv">Em Desenvolvimento</string>
+    <string name="no_content">Sem conteúdo</string>
 </resources>
