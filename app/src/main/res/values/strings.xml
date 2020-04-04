@@ -34,4 +34,6 @@
     <string name="title_favorite">Favotitos</string>
     <string name="desenv">Em Desenvolvimento</string>
     <string name="no_content">Sem conteúdo</string>
+    <string name="title_edit_photo">Editar foto</string>
+    <string name="title_edit">Editar</string>
 </resources>

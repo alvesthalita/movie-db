@@ -35,6 +35,7 @@
                 android:id="@+id/image_profile_user"
                 android:src="@drawable/ic_user"
                 app:hasBorder="true"
+                android:visibility="gone"
                 app:bootstrapBrand="secondary" />
 
             <TextView
@@ -42,7 +43,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="Editar foto"
+                android:visibility="gone"
+                android:text="@string/title_edit_photo"
                 android:textColor="@color/colorWhite"/>
 
             <TextView
@@ -93,7 +95,7 @@
                 android:id="@+id/btn_profile_edit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Editar"
+                android:text="@string/title_edit"
                 android:layout_marginTop="30dp"
                 app:bootstrapSize="lg"
                 app:buttonMode="regular"
@@ -104,7 +106,7 @@
                 android:id="@+id/btn_profile_logout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Sair"
+                android:text="@string/title_logout"
                 android:layout_marginTop="10dp"
                 app:bootstrapBrand="danger"
                 app:bootstrapSize="lg"
