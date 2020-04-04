@@ -1,9 +1,11 @@
 package com.thalita.movie_db_app.features.movies
 
+import android.widget.ProgressBar
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.*
 import com.thalita.movie_db_app.R
+import com.thalita.movie_db_app.core.extension.showProgressBar
 import com.thalita.movie_db_app.core.plataform.BaseActivity
 import com.thalita.movie_db_app.core.plataform.UserAuth
 
@@ -14,10 +16,9 @@ class MyListActivity : BaseActivity() {
 
     private var recyclerView: RecyclerView?=null
     private var databaseReference: DatabaseReference?=null
-    private var favoritesList: MutableList<FavoriteMovie>?=null
-    private var favoriteMovie: FavoriteMovie?=null
+    private var favoritesList: MutableList<GetMovies>?=null
     private var auth: UserAuth?=null
-    private lateinit var movieList: MutableList<FavoriteMovie>
+    private var progressBar: ProgressBar?=null
 
     override fun setLayout() {
         hideTop(true)
@@ -34,13 +35,16 @@ class MyListActivity : BaseActivity() {
 
     private fun init(){
         recyclerView = findViewById(R.id.recycler_view)
+        progressBar = findViewById(R.id.progressBar)
         favoritesList = mutableListOf()
         auth =UserAuth(this)
+        val rootView = window.decorView.rootView
+
+        showProgressBar(rootView)
         populateMyList()
     }
 
     private fun populateMyList(){
-        movieList = ArrayList()
         databaseReference=FirebaseDatabase.getInstance().reference
 
         databaseReference!!.child("favorites").orderByChild("email").equalTo(auth?.getEmail())
@@ -48,13 +52,16 @@ class MyListActivity : BaseActivity() {
                 ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     for (snapshot in dataSnapshot.children) {
-                        favoriteMovie = snapshot.getValue(FavoriteMovie::class.java)
-                        favoriteMovie?.let { movieList.add(it) }
+                        val movies: GetMovies? = snapshot.getValue(GetMovies::class.java)
+                        favoritesList?.add(movies!!)
                     }
+
+                    populateList()
                 }
 
                 override fun onCancelled(databaseError: DatabaseError) {}
             })
+
     }
 
     private fun populateList(){

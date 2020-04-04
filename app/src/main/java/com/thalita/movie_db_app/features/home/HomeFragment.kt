@@ -10,17 +10,18 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.thalita.movie_db_app.R
+import com.thalita.movie_db_app.core.extension.hidePogressBar
+import com.thalita.movie_db_app.core.extension.showProgressBar
+import com.thalita.movie_db_app.features.movies.MovieListAdapter
 import com.thalita.movie_db_app.features.movies.MovieResult
 import com.thalita.movie_db_app.features.movies.MovieService
 import com.thalita.movie_db_app.features.movies.MoviesApiListener
-import com.thalita.movie_db_app.features.movies.MovieListAdapter
-import com.thalita.movie_db_app.core.plataform.LoadingProgressBar
 
 class HomeFragment : Fragment(),
     MoviesApiListener {
 
     private var recyclerView: RecyclerView?=null
-    private var loadingProgressBar: LoadingProgressBar?=null
+    private var rootView: View?=null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val view: View = inflater.inflate(R.layout.fragment_home, container,false)
@@ -29,11 +30,9 @@ class HomeFragment : Fragment(),
     }
 
     private fun init(view: View) {
+        rootView = view
         recyclerView = view.findViewById(R.id.recycler_view)
-        loadingProgressBar=
-            LoadingProgressBar(view)
-
-        loadingProgressBar!!.showProgressBar()
+        showProgressBar(rootView!!)
         requestMovieList()
     }
 
@@ -52,7 +51,7 @@ class HomeFragment : Fragment(),
     }
 
     override fun onValidateRequestSuccess(result: Array<MovieResult.MovieResponse>) {
-        loadingProgressBar!!.hidePogressBar()
+        hidePogressBar(rootView!!)
         recyclerView?.layoutManager = GridLayoutManager(context, 3)
         val adapter =activity?.let {
             MovieListAdapter(
@@ -65,7 +64,7 @@ class HomeFragment : Fragment(),
     }
 
     override fun onValidateRequestFail(error: String?) {
-        loadingProgressBar!!.hidePogressBar()
+        hidePogressBar(rootView!!)
         Toast.makeText(context, error, Toast.LENGTH_LONG).show()
     }
 

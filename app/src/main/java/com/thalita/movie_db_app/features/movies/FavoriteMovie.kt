@@ -2,11 +2,16 @@ package com.thalita.movie_db_app.features.movies
 
 class FavoriteMovie {
 
+    private var userID: FavoriteMovie? = null
     private var email: String? = null
     private var titleMovie: String? = null
     private var posterPath: String? = null
     private var movieID: Int? = null
     private var watchedMovie: Boolean? = null
+
+    fun getUserID(): FavoriteMovie? {
+        return userID
+    }
 
     fun getEmail(): String? {
         return email

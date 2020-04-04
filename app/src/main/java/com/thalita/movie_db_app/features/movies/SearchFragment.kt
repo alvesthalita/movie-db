@@ -11,15 +11,16 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.thalita.movie_db_app.R
-import com.thalita.movie_db_app.core.plataform.LoadingProgressBar
+import com.thalita.movie_db_app.core.extension.hidePogressBar
+import com.thalita.movie_db_app.core.extension.showProgressBar
 
 class SearchFragment : Fragment(),
     MoviesApiListener {
 
     private var searchView: SearchView?=null
     private var recyclerView: RecyclerView?=null
-    private var loadingProgressBar: LoadingProgressBar?=null
     private var adapter: MovieListAdapter?=null
+    private var rootView: View?=null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val view: View = inflater.inflate(R.layout.fragment_search, container,false)
@@ -28,13 +29,11 @@ class SearchFragment : Fragment(),
     }
 
     private fun init(view: View){
+        rootView = view
         searchView = view.findViewById(R.id.search_view)
         recyclerView = view.findViewById(R.id.recycler_view)
         searchView?.queryHint = "Pesquisar"
         searchView?.isFocusable = true
-        loadingProgressBar=
-            LoadingProgressBar(view)
-
         search()
     }
 
@@ -47,7 +46,7 @@ class SearchFragment : Fragment(),
             }
 
             override fun onQueryTextSubmit(query: String): Boolean {
-                loadingProgressBar!!.showProgressBar()
+                rootView?.let { showProgressBar(it) }
                 searchMovie(query)
                 return false
             }
@@ -74,7 +73,7 @@ class SearchFragment : Fragment(),
     }
 
     override fun onValidateRequestSuccess(result: Array<MovieResult.MovieResponse>) {
-        loadingProgressBar!!.hidePogressBar()
+        rootView?.let { hidePogressBar(it) }
         recyclerView?.layoutManager = GridLayoutManager(context, 3)
         adapter =activity?.let {
             MovieListAdapter(
@@ -87,7 +86,7 @@ class SearchFragment : Fragment(),
     }
 
     override fun onValidateRequestFail(error: String?) {
-        loadingProgressBar!!.hidePogressBar()
+        rootView?.let { hidePogressBar(it) }
         Toast.makeText(context, error, Toast.LENGTH_LONG).show()
     }
 

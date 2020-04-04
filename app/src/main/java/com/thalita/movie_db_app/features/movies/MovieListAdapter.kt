@@ -14,7 +14,6 @@ import com.thalita.movie_db_app.R
 import com.thalita.movie_db_app.core.extension.loadFromUrl
 import javax.inject.Inject
 
-
 class MovieListAdapter
 @Inject constructor(private var context: Context, private var movieList: Array<MovieResult.MovieResponse>) : RecyclerView.Adapter<MovieListAdapter.ViewHolder>() {
 

@@ -8,7 +8,10 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.thalita.movie_db_app.R
 import com.thalita.movie_db_app.core.extension.loadFromUrl
-import com.thalita.movie_db_app.core.plataform.*
+import com.thalita.movie_db_app.core.plataform.BaseActivity
+import com.thalita.movie_db_app.core.plataform.ConfigFirebase
+import com.thalita.movie_db_app.core.plataform.DateUtils
+import com.thalita.movie_db_app.core.plataform.UserAuth
 
 /**
  * Em desenvolvimento para setar os filmes como favoritos e assistidos
@@ -26,7 +29,6 @@ class MovieDetailsActivity : BaseActivity() {
     private lateinit var closeDetails: ImageView
     private lateinit var info: FavoriteMovie
     private lateinit var scrollView: ScrollView
-    private lateinit var progressBar: LoadingProgressBar
     private lateinit var imagePoster: ImageView
     private var response: MovieResult.MovieResponse?= null
     private var databaseReference: DatabaseReference?=null
@@ -66,6 +68,7 @@ class MovieDetailsActivity : BaseActivity() {
         favorite =FavoriteMovie()
         userAuth =UserAuth(this)
         firebaseAuth = ConfigFirebase().getFirebaseAuth()
+
         response = intent.getSerializableExtra("movieDetails") as MovieResult.MovieResponse
 
         loadInformations()

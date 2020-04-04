@@ -31,8 +31,8 @@ import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.thalita.movie_db_app.R
+import com.thalita.movie_db_app.core.extension.hidePogressBar
 import com.thalita.movie_db_app.core.plataform.ConfigFirebase
-import com.thalita.movie_db_app.core.plataform.LoadingProgressBar
 import com.thalita.movie_db_app.core.plataform.UserAuth
 import com.thalita.movie_db_app.core.plataform.ValidateInput
 import com.thalita.movie_db_app.features.main.MainActivity
@@ -56,7 +56,6 @@ class ProfileFragment : Fragment() {
     private var edt_password: BootstrapEditText?=null
     private var edt_confirmPassword: BootstrapEditText?=null
     private var scrollView: ScrollView?=null
-    private var loadingProgressBar: LoadingProgressBar?=null
     private var btnEdit: BootstrapButton?=null
     private var btnLogOut: BootstrapButton?=null
     private var firebaseAuth: FirebaseAuth?=null
@@ -69,6 +68,7 @@ class ProfileFragment : Fragment() {
     private val CAMERA_REQUEST_CODE = 200
     private var pictureDialog: AlertDialog.Builder?=null
     private var edit_photo: TextView?=null
+    private var rootView: View?=null
 
     override fun onCreateView( inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val view: View=inflater.inflate(R.layout.fragment_profile, container, false)
@@ -82,6 +82,7 @@ class ProfileFragment : Fragment() {
     }
 
     private fun init(view: View) {
+        rootView = view
         tv_fullName = view.findViewById(R.id.tv_profile_fullName)
         edt_email = view.findViewById(R.id.edt_profile_email)
         edt_password = view.findViewById(R.id.edt_profile_password)
@@ -95,7 +96,6 @@ class ProfileFragment : Fragment() {
 //        FirebaseApp.initializeApp(context!!)
         auth =UserAuth(activity!!)
         userProfile =SignUpUser()
-        loadingProgressBar=  LoadingProgressBar(view)
         firebaseAuth = ConfigFirebase().getFirebaseAuth()
         databaseReference=FirebaseDatabase.getInstance().reference
 
@@ -209,7 +209,7 @@ class ProfileFragment : Fragment() {
             //Set the name on the fields
             tv_fullName?.text = name
             edt_email?.setText(email)
-            loadingProgressBar!!.hidePogressBar()
+            hidePogressBar(rootView!!)
             scrollView?.visibility = View.VISIBLE
         }
     }
