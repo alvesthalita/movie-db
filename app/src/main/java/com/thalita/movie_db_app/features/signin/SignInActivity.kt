@@ -4,17 +4,14 @@ import android.content.Intent
 import android.widget.Toast
 import com.beardedhen.androidbootstrap.BootstrapButton
 import com.beardedhen.androidbootstrap.BootstrapEditText
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
-import com.google.firebase.auth.FirebaseAuthUserCollisionException
-import com.google.firebase.auth.FirebaseAuthWeakPasswordException
+import com.google.firebase.auth.*
 import com.google.firebase.database.DatabaseReference
 import com.thalita.movie_db_app.R
-import com.thalita.movie_db_app.features.main.MainActivity
 import com.thalita.movie_db_app.core.plataform.BaseActivity
 import com.thalita.movie_db_app.core.plataform.ConfigFirebase
 import com.thalita.movie_db_app.core.plataform.UserAuth
 import com.thalita.movie_db_app.core.plataform.ValidateInput
+import com.thalita.movie_db_app.features.main.MainActivity
 
 class SignInActivity : BaseActivity() {
 
@@ -26,7 +23,7 @@ class SignInActivity : BaseActivity() {
     private var btn_cancel: BootstrapButton?=null
     private var firebaseAuth: FirebaseAuth?=null
     private var databaseReference: DatabaseReference?=null
-    private var user: SignUpUser?=null
+    private var user: SignInUser?=null
     private var userAuth: UserAuth?=null
 
     override fun setLayout() {
@@ -49,7 +46,7 @@ class SignInActivity : BaseActivity() {
         btn_signIn = findViewById(R.id.btn_signIn)
         btn_cancel = findViewById(R.id.btn_signIn_cancel)
 
-        user =SignUpUser()
+        user =SignInUser()
         userAuth =UserAuth(this)
         firebaseAuth = ConfigFirebase().getFirebaseAuth()
 
@@ -134,7 +131,7 @@ class SignInActivity : BaseActivity() {
                 this
             ) { task ->
                 if (task.isSuccessful) {
-                    insertUser(user!!)
+                    setUserNameOnFirebase(user!!)
                     finish()
                     firebaseAuth!!.signOut()
                     openMain()
@@ -156,30 +153,23 @@ class SignInActivity : BaseActivity() {
             }
     }
 
-    private fun insertUser(user: SignUpUser): Boolean {
+    private fun setUserNameOnFirebase(user: SignInUser) {
+        val userUpdate = FirebaseAuth.getInstance().currentUser
 
-        return try {
-            databaseReference = ConfigFirebase()
-                .getFirebase()
-            //Gera chave automatica e ordena por inserção no banco de dados - PRIMARY KEY
-            //Salva os dados do usuário no bando realtime
-            databaseReference!!.child("users").push().setValue(user)
-            Toast.makeText(
-                applicationContext,
-                "Cadastro efetuado com sucesso!!",
-                Toast.LENGTH_LONG
-            ).show()
-            userAuth?.saveUser(user.getEmail(), user.getPassword(), true)
-            true
-        } catch (e: java.lang.Exception) {
-            Toast.makeText(
-                applicationContext,
-                "Não foi possível realizar o cadastro, tente novamente mais tarde",
-                Toast.LENGTH_LONG
-            ).show()
-            e.printStackTrace()
-            false
-        }
+        val profileUpdates=UserProfileChangeRequest.Builder()
+            .setDisplayName(edt_fullName?.text.toString())
+            .build()
+
+        userUpdate!!.updateProfile(profileUpdates)
+            .addOnCompleteListener { task ->
+                Toast.makeText(
+                    applicationContext,
+                    "Cadastro efetuado com sucesso!!",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+
+        userAuth?.saveUser(user.getEmail(), user.getPassword(), true)
     }
 
     private fun openMain() {

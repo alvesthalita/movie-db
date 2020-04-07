@@ -2,7 +2,7 @@ package com.thalita.movie_db_app.features.signin
 
 import com.google.firebase.database.Exclude
 
-class SignUpUser{
+class SignInUser{
 
     private var email: String? = null
     private var password: String? = null

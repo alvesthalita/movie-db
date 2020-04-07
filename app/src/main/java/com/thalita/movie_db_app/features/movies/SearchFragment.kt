@@ -60,7 +60,7 @@ class SearchFragment : Fragment(),
     }
 
     private fun searchMovie(movieTitle: String) {
-        val url = "https://api.themoviedb.org/3/search/movie?api_key=6d9583667c5dfe1cebfc99d3b6819c6b&language=pt-BR&query=" + movieTitle + "&page=1&include_adult=false"
+        val url ="https://api.themoviedb.org/3/search/movie?api_key=6d9583667c5dfe1cebfc99d3b6819c6b&language=pt-BR&query=$movieTitle&page=1&include_adult=false"
         val serviceMovie =
             MovieService(context, url)
         serviceMovie.setOnValidateRequestEventListener(this)

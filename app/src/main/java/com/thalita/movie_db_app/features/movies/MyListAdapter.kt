@@ -45,4 +45,13 @@ class MyListAdapter
         val linearDetails: LinearLayout= itemView.findViewById(R.id.linear_details)
         val movieTitle: TextView= itemView.findViewById(R.id.movieTitle)
     }
+
+//    fun getMoviesDetails(id: Long){
+//        val url = "https://api.themoviedb.org/3/discover/movie?api_key=6d9583667c5dfe1cebfc99d3b6819c6b&language=pt-BR&sort_by=popularity.desc&include_adult=false&include_video=false&page=1"
+//
+//        val serviceMovie =
+//            MovieService(context, url)
+//        serviceMovie.setOnValidateRequestEventListener(context)
+//        serviceMovie.startRequest()
+//    }
 }

@@ -15,7 +15,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.thalita.movie_db_app.R
-import com.thalita.movie_db_app.features.signin.SignUpUser
+import com.thalita.movie_db_app.features.signin.SignInUser
 import com.thalita.movie_db_app.features.main.MainActivity
 import com.thalita.movie_db_app.features.signin.SignInActivity
 import com.thalita.movie_db_app.core.plataform.ConfigFirebase
@@ -31,7 +31,7 @@ class LoginFragment : Fragment() {
     private lateinit var btn_recoverPassword : TextView
     private var databaseReference: DatabaseReference? = null
     private var firebaseAuth: FirebaseAuth? = null
-    private var user: SignUpUser? = null
+    private var user: SignInUser? = null
     private var userAuth: UserAuth?=null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -58,7 +58,7 @@ class LoginFragment : Fragment() {
 
         databaseReference = FirebaseDatabase.getInstance().reference
         firebaseAuth = ConfigFirebase().getFirebaseAuth()
-        user =SignUpUser()
+        user =SignInUser()
         userAuth = activity?.let {
             UserAuth(
                 it
