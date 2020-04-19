@@ -9,7 +9,7 @@ class GetMovies :Serializable{
     var posterPath: String?=null
         private set
 
-    var movieID: Long?=null
+    var movieID: Int?=null
         private set
 
     var titleMovie: String?=null
@@ -19,7 +19,7 @@ class GetMovies :Serializable{
         private set
 
     private constructor() {}
-    constructor(email: String?, posterPath: String?, movieID: Long, titleMovie: String, watchedMovie: Boolean) {
+    constructor(email: String?, posterPath: String?, movieID: Int, titleMovie: String, watchedMovie: Boolean) {
         this.email=email
         this.posterPath=posterPath
         this.movieID=movieID

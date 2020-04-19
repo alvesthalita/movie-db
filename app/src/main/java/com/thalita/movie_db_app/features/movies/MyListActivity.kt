@@ -1,5 +1,6 @@
 package com.thalita.movie_db_app.features.movies
 
+import android.util.Log
 import android.widget.ProgressBar
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -46,10 +47,7 @@ class MyListActivity : BaseActivity() {
 
     private fun populateMyList(){
         databaseReference=FirebaseDatabase.getInstance().reference
-
-        databaseReference!!.child("favorites").orderByChild("email").equalTo(auth?.getEmail())
-            .addListenerForSingleValueEvent(object :
-                ValueEventListener {
+        databaseReference!!.child("favorites").addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     for (snapshot in dataSnapshot.children) {
                         val movies: GetMovies? = snapshot.getValue(GetMovies::class.java)
@@ -59,7 +57,9 @@ class MyListActivity : BaseActivity() {
                     populateList()
                 }
 
-                override fun onCancelled(databaseError: DatabaseError) {}
+                override fun onCancelled(databaseError: DatabaseError) {
+                    Log.d("MyListActivity: ", databaseError.message)
+                }
             })
 
     }

@@ -3,18 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:background="@color/colorAccent"
     android:gravity="center">
-
-    <ProgressBar
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        style="?android:attr/progressBarStyleLarge"
-        android:visibility="gone"
-        android:layout_gravity="center"
-        android:theme="@style/ProgressBarTheme"
-        android:id="@+id/progressBar" />
 
     <ScrollView
         android:id="@+id/scrollView"
@@ -101,6 +93,17 @@
                 app:buttonMode="regular"
                 app:showOutline="false"
                 app:roundedCorners="true" />
+
+            <ProgressBar
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                style="?android:attr/progressBarStyleLarge"
+                android:visibility="gone"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:theme="@style/ProgressBarTheme"
+                android:id="@+id/progressBar"
+                tools:visibility="gone"/>
 
             <com.beardedhen.androidbootstrap.BootstrapButton
                 android:id="@+id/btn_profile_logout"

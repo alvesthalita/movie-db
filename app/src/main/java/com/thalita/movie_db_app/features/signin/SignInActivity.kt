@@ -169,7 +169,7 @@ class SignInActivity : BaseActivity() {
                 ).show()
             }
 
-        userAuth?.saveUser(user.getEmail(), user.getPassword(), true)
+        userAuth?.saveUser(user.getEmail(), user.getPassword())
     }
 
     private fun openMain() {

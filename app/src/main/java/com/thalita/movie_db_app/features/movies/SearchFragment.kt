@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.thalita.movie_db_app.R
 import com.thalita.movie_db_app.core.extension.hidePogressBar
 import com.thalita.movie_db_app.core.extension.showProgressBar
+import com.thalita.movie_db_app.core.repository.MovieRepository
 
 class SearchFragment : Fragment(),
     MoviesApiListener {
@@ -62,9 +63,11 @@ class SearchFragment : Fragment(),
     private fun searchMovie(movieTitle: String) {
         val url ="https://api.themoviedb.org/3/search/movie?api_key=6d9583667c5dfe1cebfc99d3b6819c6b&language=pt-BR&query=$movieTitle&page=1&include_adult=false"
         val serviceMovie =
-            MovieService(context, url)
-        serviceMovie.setOnValidateRequestEventListener(this)
-        serviceMovie.startRequest()
+            MovieRepository(
+                context,
+                url
+            )
+        serviceMovie.startRequest(this)
     }
 
     override fun onResume() {

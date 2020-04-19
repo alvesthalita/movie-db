@@ -1,5 +1,6 @@
 package com.thalita.movie_db_app.features.profile
 
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -11,23 +12,23 @@ import android.view.ViewGroup
 import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.beardedhen.androidbootstrap.BootstrapButton
 import com.beardedhen.androidbootstrap.BootstrapCircleThumbnail
 import com.beardedhen.androidbootstrap.BootstrapEditText
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-import com.thalita.movie_db_app.R
 import com.thalita.movie_db_app.core.extension.hidePogressBar
 import com.thalita.movie_db_app.core.plataform.ConfigFirebase
 import com.thalita.movie_db_app.core.plataform.UserAuth
 import com.thalita.movie_db_app.core.plataform.ValidateInput
 import com.thalita.movie_db_app.features.main.MainActivity
 import com.thalita.movie_db_app.features.signin.SignInUser
+import com.thalita.movie_db_app.R
+import com.thalita.movie_db_app.core.extension.showProgressBar
+
 
 /**
  * Em desenvolvimento
@@ -45,14 +46,7 @@ class ProfileFragment : Fragment() {
     private var btnEdit: BootstrapButton?=null
     private var btnLogOut: BootstrapButton?=null
     private var firebaseAuth: FirebaseAuth?=null
-    private var key: String?=null
-    private var fullName: String?=null
     private var image_user: BootstrapCircleThumbnail?=null
-    private val GALLERY = 1
-    private val CAMERA = 2
-    private val TAG = "PermissionDemo"
-    private val CAMERA_REQUEST_CODE = 200
-    private var pictureDialog: AlertDialog.Builder?=null
     private var edit_photo: TextView?=null
     private var rootView: View?=null
 
@@ -78,8 +72,6 @@ class ProfileFragment : Fragment() {
         btnLogOut = view.findViewById(R.id.btn_profile_logout)
         image_user = view.findViewById(R.id.image_profile_user)
         edit_photo = view.findViewById(R.id.tv_edit_photo)
-
-//        FirebaseApp.initializeApp(context!!)
         auth =UserAuth(activity!!)
         userProfile =SignInUser()
         firebaseAuth = ConfigFirebase().getFirebaseAuth()
@@ -93,6 +85,9 @@ class ProfileFragment : Fragment() {
         underlineText()
 
         btnEdit?.setOnClickListener {
+            btnEdit?.visibility = View.GONE
+            btnLogOut?.visibility = View.GONE
+            showProgressBar(rootView!!)
             validateFields()
         }
 
@@ -110,7 +105,7 @@ class ProfileFragment : Fragment() {
 
     private fun logout(){
         activity?.let { UserAuth(it)
-            .saveUser(null, null, false) }
+            .saveUser(null, null) }
         firebaseAuth!!.signOut()
         context?.let { UserAuth(it).logout() }
         val intent=Intent(activity, MainActivity::class.java)
@@ -201,6 +196,10 @@ class ProfileFragment : Fragment() {
             ?.addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     Log.d(TAG, "User password updated.")
+                    updateEmailOnFavoritesTable(edt_email?.text.toString())
+                    btnEdit?.visibility = View.VISIBLE
+                    btnLogOut?.visibility = View.VISIBLE
+                    hidePogressBar(rootView!!)
                     edt_password?.setText("")
                     edt_confirmPassword?.setText("")
 
@@ -211,6 +210,15 @@ class ProfileFragment : Fragment() {
                     ).show()
                 }
             }
+    }
+
+    /**
+     * Faz o update do email na tabela de favoritos
+     */
+    private fun updateEmailOnFavoritesTable(email: String){
+        databaseReference = ConfigFirebase().getFirebase()
+        databaseReference?.child("favorites")?.child("email")?.setValue(email);
+        auth?.saveUser(email, null)
     }
 
 }

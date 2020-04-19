@@ -45,7 +45,7 @@ class MovieListAdapter
         view.linearDetails.setOnClickListener {
             val intent = Intent(context, MovieDetailsActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
-            intent.putExtra("movieDetails", movieList[position])
+            intent.putExtra("movieID", movieList[position])
             context.startActivity(intent)
         }
     }

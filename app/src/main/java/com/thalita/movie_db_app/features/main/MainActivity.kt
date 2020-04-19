@@ -35,10 +35,10 @@ class MainActivity : BaseActivity() {
     private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         userAuth =UserAuth(this)
 
-        if(userAuth!!.getUserLogged()!!){
+        if(userAuth!!.isLogged()){
             loadFragment(item.itemId)
         }else {
-            showNavigation(false)
+            showMenuNavigation(false)
             replaceFragment(LoginFragment())
         }
         true
@@ -46,7 +46,7 @@ class MainActivity : BaseActivity() {
 
     private fun loadFragment(itemId: Int) {
         val tag = itemId.toString()
-        showNavigation(true)
+        showMenuNavigation(true)
         supportFragmentManager.findFragmentByTag(tag) ?: when (itemId) {
             R.id.nav_home -> {
                 replaceFragment(HomeFragment())
@@ -70,7 +70,7 @@ class MainActivity : BaseActivity() {
         const val PARAM_NAVIGATION_ID = "navigation_id"
     }
 
-    private fun showNavigation(show: Boolean) {
+    private fun showMenuNavigation(show: Boolean) {
         if(show){
             navigationView?.visibility = View.VISIBLE
         }else{

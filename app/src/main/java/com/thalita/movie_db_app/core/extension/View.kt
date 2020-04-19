@@ -9,6 +9,7 @@ import androidx.annotation.LayoutRes
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.thalita.movie_db_app.R
+import com.thalita.movie_db_app.features.movies.GetMovies
 
 fun View.cancelTransition() {
     transitionName = null

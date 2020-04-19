@@ -125,7 +125,7 @@ class LoginFragment : Fragment() {
             firebaseAuth?.signInWithEmailAndPassword(it, user!!.getPassword()!!)
                 ?.addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        userAuth?.saveUser(edt_login.text.toString(), null, true)
+                        userAuth?.saveUser(edt_login.text.toString(), null)
                         openHome()
                     } else {
                         Toast.makeText(

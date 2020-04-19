@@ -14,7 +14,7 @@ import com.thalita.movie_db_app.core.extension.hidePogressBar
 import com.thalita.movie_db_app.core.extension.showProgressBar
 import com.thalita.movie_db_app.features.movies.MovieListAdapter
 import com.thalita.movie_db_app.features.movies.MovieResult
-import com.thalita.movie_db_app.features.movies.MovieService
+import com.thalita.movie_db_app.core.repository.MovieRepository
 import com.thalita.movie_db_app.features.movies.MoviesApiListener
 
 class HomeFragment : Fragment(),
@@ -39,10 +39,12 @@ class HomeFragment : Fragment(),
     private fun requestMovieList() {
         val url = "https://api.themoviedb.org/3/discover/movie?api_key=6d9583667c5dfe1cebfc99d3b6819c6b&language=pt-BR&sort_by=popularity.desc&include_adult=false&include_video=false&page=1"
 
-        val serviceMovie =
-            MovieService(context, url)
-        serviceMovie.setOnValidateRequestEventListener(this)
-        serviceMovie.startRequest()
+        val movieRepository =
+            MovieRepository(
+                context,
+                url
+            )
+        movieRepository.startRequest(this)
     }
 
     override fun onResume() {
