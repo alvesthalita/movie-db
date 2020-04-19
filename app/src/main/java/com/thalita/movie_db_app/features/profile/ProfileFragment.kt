@@ -27,7 +27,9 @@ import com.thalita.movie_db_app.core.plataform.ValidateInput
 import com.thalita.movie_db_app.features.main.MainActivity
 import com.thalita.movie_db_app.features.signin.SignInUser
 import com.thalita.movie_db_app.R
+import com.thalita.movie_db_app.core.extension.invisible
 import com.thalita.movie_db_app.core.extension.showProgressBar
+import com.thalita.movie_db_app.core.extension.visible
 
 
 /**
@@ -85,8 +87,8 @@ class ProfileFragment : Fragment() {
         underlineText()
 
         btnEdit?.setOnClickListener {
-            btnEdit?.visibility = View.GONE
-            btnLogOut?.visibility = View.GONE
+            btnEdit?.invisible()
+            btnLogOut?.invisible()
             showProgressBar(rootView!!)
             validateFields()
         }
@@ -172,7 +174,7 @@ class ProfileFragment : Fragment() {
             tv_fullName?.text = name
             edt_email?.setText(email)
             hidePogressBar(rootView!!)
-            scrollView?.visibility = View.VISIBLE
+            scrollView?.visible()
         }
     }
 
@@ -197,8 +199,8 @@ class ProfileFragment : Fragment() {
                 if (task.isSuccessful) {
                     Log.d(TAG, "User password updated.")
                     updateEmailOnFavoritesTable(edt_email?.text.toString())
-                    btnEdit?.visibility = View.VISIBLE
-                    btnLogOut?.visibility = View.VISIBLE
+                    btnEdit?.visible()
+                    btnLogOut?.visible()
                     hidePogressBar(rootView!!)
                     edt_password?.setText("")
                     edt_confirmPassword?.setText("")

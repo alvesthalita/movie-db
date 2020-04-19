@@ -17,6 +17,7 @@ import com.thalita.movie_db_app.core.repository.MovieDetailsRepository
 import java.util.*
 import kotlin.concurrent.schedule
 import com.thalita.movie_db_app.R
+import com.thalita.movie_db_app.core.extension.visible
 
 
 /**
@@ -190,7 +191,7 @@ class MovieDetailsActivity : BaseActivity(), MovieDetailsApiListener{
     override fun onValidateRequestSuccess(result: MovieDetailsResult) {
         val rootView = window.decorView.rootView
         hidePogressBar(rootView)
-        scrollView.visibility = View.VISIBLE
+        scrollView.visible()
         val posterURL= if (result.backdrop_path.isNullOrEmpty()) "" else "https://image.tmdb.org/t/p/w500" + result.backdrop_path
         if (posterURL.isEmpty()) imagePoster.setImageDrawable(getDrawable(R.drawable.unavailable_photo)) else imagePoster.loadFromUrl(posterURL)
 

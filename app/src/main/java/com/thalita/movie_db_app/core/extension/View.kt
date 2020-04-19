@@ -9,7 +9,6 @@ import androidx.annotation.LayoutRes
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.thalita.movie_db_app.R
-import com.thalita.movie_db_app.features.movies.GetMovies
 
 fun View.cancelTransition() {
     transitionName = null
@@ -40,7 +39,7 @@ fun showProgressBar(view: View){
     var progressBarStatus = 0
     var dummy:Int = 0
     val progressBar = view.findViewById<ProgressBar>(R.id.progressBar)
-    progressBar.visibility = View.VISIBLE
+    progressBar.visible()
 
     Thread(Runnable {
         while (progressBarStatus < 100) {
@@ -62,5 +61,5 @@ fun showProgressBar(view: View){
  */
 fun hidePogressBar(view: View){
     val progressBar =view.findViewById<ProgressBar>(R.id.progressBar)
-    progressBar?.visibility = View.GONE
+    progressBar?.invisible()
 }

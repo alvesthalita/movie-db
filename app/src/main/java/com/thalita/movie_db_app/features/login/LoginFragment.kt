@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -15,6 +16,10 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.thalita.movie_db_app.R
+import com.thalita.movie_db_app.core.extension.hidePogressBar
+import com.thalita.movie_db_app.core.extension.invisible
+import com.thalita.movie_db_app.core.extension.showProgressBar
+import com.thalita.movie_db_app.core.extension.visible
 import com.thalita.movie_db_app.features.signin.SignInUser
 import com.thalita.movie_db_app.features.main.MainActivity
 import com.thalita.movie_db_app.features.signin.SignInActivity
@@ -27,12 +32,14 @@ class LoginFragment : Fragment() {
     private lateinit var edt_login : BootstrapEditText
     private lateinit var edt_password : BootstrapEditText
     private lateinit var btn_login : BootstrapButton
-    private lateinit var btn_signIn : TextView
+    private lateinit var btn_signIn : BootstrapButton
     private lateinit var btn_recoverPassword : TextView
     private var databaseReference: DatabaseReference? = null
     private var firebaseAuth: FirebaseAuth? = null
     private var user: SignInUser? = null
     private var userAuth: UserAuth?=null
+    private var rootView: View?=null
+    private var buttonsLayout: LinearLayout?=null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val view: View = inflater.inflate(
@@ -49,12 +56,14 @@ class LoginFragment : Fragment() {
     }
 
     fun initComponent(view: View){
+        rootView = view
         (activity as AppCompatActivity?)!!.supportActionBar!!.hide()
         edt_login = view.findViewById(R.id.edt_login_email)
         edt_password = view.findViewById(R.id.edt_login_password)
         btn_login = view.findViewById(R.id.btn_login)
-        btn_signIn = view.findViewById(R.id.tv_signIn)
+        btn_signIn = view.findViewById(R.id.btn_doSignin)
         btn_recoverPassword = view.findViewById(R.id.tv_password)
+        buttonsLayout = view.findViewById(R.id.buttons_layout)
 
         databaseReference = FirebaseDatabase.getInstance().reference
         firebaseAuth = ConfigFirebase().getFirebaseAuth()
@@ -118,6 +127,8 @@ class LoginFragment : Fragment() {
     }
 
     private fun startLogin() {
+        buttonsLayout?.invisible()
+        showProgressBar(rootView!!)
         user?.setEmail(edt_login.text.toString())
         user?.setPassword(edt_password.text.toString())
 
@@ -128,6 +139,8 @@ class LoginFragment : Fragment() {
                         userAuth?.saveUser(edt_login.text.toString(), null)
                         openHome()
                     } else {
+                        buttonsLayout?.visible()
+                        hidePogressBar(rootView!!)
                         Toast.makeText(
                             context,
                             "Usuário ou senha inválidos",

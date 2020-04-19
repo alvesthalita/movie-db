@@ -1,12 +1,17 @@
 package com.thalita.movie_db_app.features.signin
 
 import android.content.Intent
+import android.view.View
 import android.widget.Toast
 import com.beardedhen.androidbootstrap.BootstrapButton
 import com.beardedhen.androidbootstrap.BootstrapEditText
 import com.google.firebase.auth.*
 import com.google.firebase.database.DatabaseReference
 import com.thalita.movie_db_app.R
+import com.thalita.movie_db_app.core.extension.hidePogressBar
+import com.thalita.movie_db_app.core.extension.invisible
+import com.thalita.movie_db_app.core.extension.showProgressBar
+import com.thalita.movie_db_app.core.extension.visible
 import com.thalita.movie_db_app.core.plataform.BaseActivity
 import com.thalita.movie_db_app.core.plataform.ConfigFirebase
 import com.thalita.movie_db_app.core.plataform.UserAuth
@@ -126,6 +131,11 @@ class SignInActivity : BaseActivity() {
     }
 
     private fun signInNewUser(){
+        val rootView = window.decorView.rootView
+        btn_cancel?.invisible()
+        btn_signIn?.invisible()
+        showProgressBar(rootView!!)
+
         firebaseAuth!!.createUserWithEmailAndPassword(user!!.getEmail()!!, user!!.getPassword()!!)
             .addOnCompleteListener(
                 this
@@ -151,6 +161,10 @@ class SignInActivity : BaseActivity() {
                     Toast.makeText(applicationContext, error, Toast.LENGTH_LONG).show()
                 }
             }
+
+        btn_cancel?.visible()
+        btn_signIn?.visible()
+        hidePogressBar(rootView)
     }
 
     private fun setUserNameOnFirebase(user: SignInUser) {

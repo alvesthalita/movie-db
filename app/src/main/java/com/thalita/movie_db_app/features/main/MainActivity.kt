@@ -3,6 +3,8 @@ package com.thalita.movie_db_app.features.main
 import android.view.View
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.thalita.movie_db_app.R
+import com.thalita.movie_db_app.core.extension.invisible
+import com.thalita.movie_db_app.core.extension.visible
 import com.thalita.movie_db_app.features.home.HomeFragment
 import com.thalita.movie_db_app.features.login.LoginFragment
 import com.thalita.movie_db_app.features.profile.ProfileFragment
@@ -72,9 +74,9 @@ class MainActivity : BaseActivity() {
 
     private fun showMenuNavigation(show: Boolean) {
         if(show){
-            navigationView?.visibility = View.VISIBLE
+            navigationView?.visible()
         }else{
-            navigationView?.visibility = View.GONE
+            navigationView?.invisible()
         }
     }
 }

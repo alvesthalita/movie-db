@@ -1,10 +1,13 @@
 package com.thalita.movie_db_app.features.login
 
+import android.view.View
 import android.widget.Toast
 import com.beardedhen.androidbootstrap.BootstrapButton
 import com.beardedhen.androidbootstrap.BootstrapEditText
 import com.google.firebase.auth.FirebaseAuth
 import com.thalita.movie_db_app.R
+import com.thalita.movie_db_app.core.extension.invisible
+import com.thalita.movie_db_app.core.extension.showProgressBar
 import com.thalita.movie_db_app.core.plataform.BaseActivity
 import com.thalita.movie_db_app.core.plataform.ConfigFirebase
 import com.thalita.movie_db_app.core.plataform.ValidateInput
@@ -67,6 +70,10 @@ class RecoverPasswordActivity : BaseActivity() {
             ).show()
             return
         }else{
+            val rootView = window.decorView.rootView
+            btn_cancel?.invisible()
+            btn_send?.invisible()
+            showProgressBar(rootView!!)
             recoverPassword()
         }
     }
