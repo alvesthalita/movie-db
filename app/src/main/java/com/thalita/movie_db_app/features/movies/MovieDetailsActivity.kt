@@ -1,14 +1,12 @@
 package com.thalita.movie_db_app.features.movies
 
 import android.os.Build
-import android.view.View
 import android.widget.*
 import androidx.annotation.RequiresApi
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
-import com.thalita.movie_db_app.core.extension.hidePogressBar
-import com.thalita.movie_db_app.core.extension.loadFromUrl
-import com.thalita.movie_db_app.core.extension.showProgressBar
+import com.thalita.movie_db_app.R
+import com.thalita.movie_db_app.core.extension.*
 import com.thalita.movie_db_app.core.plataform.BaseActivity
 import com.thalita.movie_db_app.core.plataform.ConfigFirebase
 import com.thalita.movie_db_app.core.plataform.DateUtils
@@ -16,8 +14,6 @@ import com.thalita.movie_db_app.core.plataform.UserAuth
 import com.thalita.movie_db_app.core.repository.MovieDetailsRepository
 import java.util.*
 import kotlin.concurrent.schedule
-import com.thalita.movie_db_app.R
-import com.thalita.movie_db_app.core.extension.visible
 
 
 /**
@@ -34,7 +30,6 @@ class MovieDetailsActivity : BaseActivity(), MovieDetailsApiListener{
     private lateinit var favoriteMovie: CheckBox
     private lateinit var watchedMovie: CheckBox
     private lateinit var closeDetails: ImageView
-    private lateinit var movie: FavoriteMovie
     private lateinit var scrollView: ScrollView
     private lateinit var imagePoster: ImageView
     private var response: MovieResult.MovieResponse?= null
@@ -44,7 +39,7 @@ class MovieDetailsActivity : BaseActivity(), MovieDetailsApiListener{
     private var userAuth: UserAuth?=null
     private var firebaseAuth: FirebaseAuth?=null
     private var favorite: FavoriteMovie?=null
-    private var arrayList: ArrayList<FavoriteMovie>?=null
+    private var favoriteMovieList: ArrayList<FavoriteMovie>?=null
 
     override fun setLayout() {
         hideTop(true)
@@ -81,7 +76,6 @@ class MovieDetailsActivity : BaseActivity(), MovieDetailsApiListener{
         Timer("SettingUp", false).schedule(1000) {
             getMoviesDetails()
         }
-        loadInformations()
         setOnClickClose()
     }
 
@@ -159,7 +153,7 @@ class MovieDetailsActivity : BaseActivity(), MovieDetailsApiListener{
     /**
      * Exibe se o filme já foi assistido/favoritado.
      */
-    private fun loadInformations() {
+    private fun markAsFavoriteAndWatchedMovie() {
         databaseReference = FirebaseDatabase.getInstance().reference
         val userEmail: String = userAuth?.getEmail().toString()
 
@@ -167,24 +161,24 @@ class MovieDetailsActivity : BaseActivity(), MovieDetailsApiListener{
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     for (snapshot in dataSnapshot.children) {
-                        movie =snapshot.getValue(FavoriteMovie::class.java)!!
+                       val movie =snapshot.getValue(FavoriteMovie::class.java)!!
 
                         if(movieID.toString() == movie.getMovieID().toString()) {
-                            markMovieAs(true, watched=true)
-                            break
+                            favoriteMovie.checked()
+
+                            if(movie.getWatchedMovie() as Boolean){
+                                watchedMovie.checked()
+                            }
                         }
                     }
                 }
 
                 override fun onCancelled(databaseError: DatabaseError) {
-                    markMovieAs(true, watched=false)
+                    watchedMovie.unChecked()
+                    favoriteMovie.unChecked()
                 }
             })
-    }
 
-    private fun markMovieAs(favorite: Boolean, watched: Boolean){
-        watchedMovie.isChecked = watched
-        favoriteMovie.isChecked = favorite
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -192,6 +186,7 @@ class MovieDetailsActivity : BaseActivity(), MovieDetailsApiListener{
         val rootView = window.decorView.rootView
         hidePogressBar(rootView)
         scrollView.visible()
+        markAsFavoriteAndWatchedMovie()
         val posterURL= if (result.backdrop_path.isNullOrEmpty()) "" else "https://image.tmdb.org/t/p/w500" + result.backdrop_path
         if (posterURL.isEmpty()) imagePoster.setImageDrawable(getDrawable(R.drawable.unavailable_photo)) else imagePoster.loadFromUrl(posterURL)
 
@@ -207,7 +202,7 @@ class MovieDetailsActivity : BaseActivity(), MovieDetailsApiListener{
 
     override fun onValidateRequestFail(message: String?, error: Boolean?) {
         finish()
-        Toast.makeText(this, "Não foi possível carregar os dados", Toast.LENGTH_LONG).show()
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
     }
 
 }

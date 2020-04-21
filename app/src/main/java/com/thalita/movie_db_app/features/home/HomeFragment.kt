@@ -12,10 +12,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.thalita.movie_db_app.R
 import com.thalita.movie_db_app.core.extension.hidePogressBar
 import com.thalita.movie_db_app.core.extension.showProgressBar
+import com.thalita.movie_db_app.core.repository.MovieRepository
 import com.thalita.movie_db_app.features.movies.MovieListAdapter
 import com.thalita.movie_db_app.features.movies.MovieResult
-import com.thalita.movie_db_app.core.repository.MovieRepository
 import com.thalita.movie_db_app.features.movies.MoviesApiListener
+
 
 class HomeFragment : Fragment(),
     MoviesApiListener {
@@ -69,5 +70,6 @@ class HomeFragment : Fragment(),
         hidePogressBar(rootView!!)
         Toast.makeText(context, error, Toast.LENGTH_LONG).show()
     }
+
 
 }

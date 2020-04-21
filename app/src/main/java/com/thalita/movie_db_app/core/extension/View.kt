@@ -1,14 +1,21 @@
 package com.thalita.movie_db_app.core.extension
 
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.ProgressBar
 import androidx.annotation.LayoutRes
+import androidx.vectordrawable.graphics.drawable.Animatable2Compat
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.bumptech.glide.load.resource.gif.GifDrawable
+import com.bumptech.glide.request.RequestListener
 import com.thalita.movie_db_app.R
+import javax.sql.DataSource
 
 fun View.cancelTransition() {
     transitionName = null
@@ -19,6 +26,10 @@ fun View.isVisible() = this.visibility == View.VISIBLE
 fun View.visible() { this.visibility = View.VISIBLE }
 
 fun View.invisible() { this.visibility = View.GONE }
+
+fun CheckBox.checked(){ this.isChecked = true}
+
+fun CheckBox.unChecked(){ this.isChecked = false}
 
 fun ViewGroup.inflate(@LayoutRes layoutRes: Int): View =
     LayoutInflater.from(context).inflate(layoutRes, this, false)

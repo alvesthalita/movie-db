@@ -12,9 +12,6 @@ import com.thalita.movie_db_app.core.plataform.BaseActivity
 import com.thalita.movie_db_app.core.plataform.UserAuth
 import java.util.*
 
-/**
- * Em desenvolvimento
- */
 class WatchedActivity : BaseActivity() {
 
     private var recyclerView: RecyclerView?=null
