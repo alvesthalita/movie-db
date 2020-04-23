@@ -88,9 +88,11 @@ class SearchFragment : Fragment(),
         recyclerView?.adapter = adapter
     }
 
-    override fun onValidateRequestFail(error: String?) {
+    override fun onValidateRequestFail(message: String?, error: Boolean) {
         rootView?.let { hidePogressBar(it) }
-        Toast.makeText(context, error, Toast.LENGTH_LONG).show()
+        if(error) {
+            Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+        }
     }
 
 }

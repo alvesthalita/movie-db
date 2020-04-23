@@ -25,7 +25,7 @@ class MovieRepository(private var context: Context?, private var url: String?){
 
             }, Response.ErrorListener { error ->
                 Log.d("ERROR: ", error.toString())
-            moviesApiListener.onValidateRequestFail("Não foi possível conectar com o servidor, tente novamente mais tarde.")
+            moviesApiListener.onValidateRequestFail("Não foi possível conectar com o servidor, tente novamente mais tarde.", error = true)
             })
 
         jsonObjectRequest.retryPolicy=DefaultRetryPolicy(

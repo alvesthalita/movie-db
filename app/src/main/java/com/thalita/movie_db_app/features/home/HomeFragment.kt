@@ -1,6 +1,7 @@
 package com.thalita.movie_db_app.features.home
 
 import android.os.Bundle
+import android.os.Message
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -66,10 +67,11 @@ class HomeFragment : Fragment(),
         recyclerView?.adapter = adapter
     }
 
-    override fun onValidateRequestFail(error: String?) {
+    override fun onValidateRequestFail(message: String?, error: Boolean) {
         hidePogressBar(rootView!!)
-        Toast.makeText(context, error, Toast.LENGTH_LONG).show()
+
+        if (error) {
+            Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+        }
     }
-
-
 }
