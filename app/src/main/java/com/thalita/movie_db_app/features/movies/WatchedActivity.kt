@@ -56,8 +56,8 @@ class WatchedActivity : BaseActivity() {
                         val isWatched= Objects.requireNonNull(snapshot.child("watchedMovie").value)
 
                         if(isWatched as Boolean) {
-                            val day: GetMovies?=snapshot.getValue(GetMovies::class.java)
-                            favoritesList?.add(day!!)
+                            val movie: GetMovies?=snapshot.getValue(GetMovies::class.java)
+                            favoritesList?.add(movie!!)
                         }
                     }
 

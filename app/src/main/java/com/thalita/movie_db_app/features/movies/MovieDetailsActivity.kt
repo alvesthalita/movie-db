@@ -35,11 +35,12 @@ class MovieDetailsActivity : BaseActivity(), MovieDetailsApiListener{
     private var response: MovieResult.MovieResponse?= null
     private var responseAdapter: GetMovies?= null
     private var movieID: Int?=null
+    private var movieName: String?=null
+    private var moviePosterPath: String?=null
     private var databaseReference: DatabaseReference?=null
     private var userAuth: UserAuth?=null
     private var firebaseAuth: FirebaseAuth?=null
     private var favorite: FavoriteMovie?=null
-    private var favoriteMovieList: ArrayList<FavoriteMovie>?=null
 
     override fun setLayout() {
         hideTop(true)
@@ -76,6 +77,9 @@ class MovieDetailsActivity : BaseActivity(), MovieDetailsApiListener{
         Timer("SettingUp", false).schedule(1000) {
             getMoviesDetails()
         }
+
+        setMovieAsFavorite()
+        setMovieAsWatched()
         setOnClickClose()
     }
 
@@ -83,9 +87,13 @@ class MovieDetailsActivity : BaseActivity(), MovieDetailsApiListener{
         if(intent.getSerializableExtra("movieID") != null) {
             response =intent.getSerializableExtra("movieID") as MovieResult.MovieResponse
             movieID = response!!.id
+            movieName = response!!.title
+            moviePosterPath = response!!.poster_path
         }else if(intent.getSerializableExtra("movieDetailsAdapter") != null){
             responseAdapter=intent.getSerializableExtra("movieDetailsAdapter") as GetMovies
             movieID = responseAdapter?.movieID
+            movieName = responseAdapter!!.titleMovie
+            moviePosterPath = responseAdapter!!.posterPath
         }
 
         val url: String = "https://api.themoviedb.org/3/movie/" + movieID.toString() +"?api_key=6d9583667c5dfe1cebfc99d3b6819c6b&language=pt-BR";
@@ -105,12 +113,7 @@ class MovieDetailsActivity : BaseActivity(), MovieDetailsApiListener{
     private fun setMovieAsFavorite(){
         favoriteMovie.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
-                favorite!!.setEmail(userAuth!!.getEmail())
-                favorite!!.setMovieID(response!!.id)
-                favorite!!.setTitleMovie(response!!.title)
-                favorite!!.setPosterPath(response!!.poster_path)
-                favorite!!.setWatchedMovie(false)
-                saveMovie(favorite!!)
+                saveMovieAsFavoriteOrWatched(isFavorite = true, isWatched=false)
             }
         }
     }
@@ -121,14 +124,43 @@ class MovieDetailsActivity : BaseActivity(), MovieDetailsApiListener{
     private fun setMovieAsWatched(){
         watchedMovie.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
-                favorite!!.setEmail(userAuth!!.getEmail())
-                favorite!!.setMovieID(response!!.id)
-                favorite!!.setTitleMovie(response!!.title)
-                favorite!!.setPosterPath(response!!.poster_path)
-                favorite!!.setWatchedMovie(true)
-                saveMovie(favorite!!)
+                saveMovieAsFavoriteOrWatched(isFavorite=false, isWatched=true)
             }
         }
+    }
+
+    private fun saveMovieAsFavoriteOrWatched(isFavorite: Boolean, isWatched: Boolean){
+        databaseReference = FirebaseDatabase.getInstance().reference
+        var updateMovie: Boolean = false
+        databaseReference!!.child("favorites").orderByChild("email").equalTo(userAuth?.getEmail())
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    for (snapshot in dataSnapshot.children) {
+                        val movie =snapshot.getValue(FavoriteMovie::class.java)!!
+
+                        if(movieID.toString() == movie.getMovieID().toString()) {
+                            //do something
+                            updateMovie = true
+                            break
+                        }
+                    }
+                }
+
+                override fun onCancelled(databaseError: DatabaseError) {
+                    watchedMovie.unChecked()
+                    favoriteMovie.unChecked()
+                }
+            })
+
+//        if(!updateMovie){
+//            favorite!!.setEmail(userAuth!!.getEmail())
+//            favorite!!.setMovieID(movieID)
+//            favorite!!.setTitleMovie(movieName)
+//            favorite!!.setPosterPath(moviePosterPath)
+//            favorite!!.setWatchedMovie(isWatched)
+//            favorite!!.setFavorite(isFavorite)
+//            saveMovie(favorite!!)
+//        }
     }
 
     /**
@@ -155,16 +187,16 @@ class MovieDetailsActivity : BaseActivity(), MovieDetailsApiListener{
      */
     private fun markAsFavoriteAndWatchedMovie() {
         databaseReference = FirebaseDatabase.getInstance().reference
-        val userEmail: String = userAuth?.getEmail().toString()
-
-        databaseReference!!.child("favorites").orderByChild("email").equalTo(userEmail)
+        databaseReference!!.child("favorites").orderByChild("email").equalTo(userAuth?.getEmail())
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     for (snapshot in dataSnapshot.children) {
                        val movie =snapshot.getValue(FavoriteMovie::class.java)!!
 
                         if(movieID.toString() == movie.getMovieID().toString()) {
-                            favoriteMovie.checked()
+                            if(movie.getFavorite() as Boolean) {
+                                favoriteMovie.checked()
+                            }
 
                             if(movie.getWatchedMovie() as Boolean){
                                 watchedMovie.checked()

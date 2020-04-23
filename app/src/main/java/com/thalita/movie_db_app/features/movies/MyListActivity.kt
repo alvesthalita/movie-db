@@ -6,13 +6,12 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.*
 import com.thalita.movie_db_app.R
+import com.thalita.movie_db_app.core.extension.hidePogressBar
 import com.thalita.movie_db_app.core.extension.showProgressBar
 import com.thalita.movie_db_app.core.plataform.BaseActivity
 import com.thalita.movie_db_app.core.plataform.UserAuth
+import java.util.*
 
-/**
- * Em desenvolvimento
- */
 class MyListActivity : BaseActivity() {
 
     private var recyclerView: RecyclerView?=null
@@ -47,24 +46,31 @@ class MyListActivity : BaseActivity() {
 
     private fun populateMyList(){
         databaseReference=FirebaseDatabase.getInstance().reference
-        databaseReference!!.child("favorites").addListenerForSingleValueEvent(object : ValueEventListener {
+        databaseReference!!.child("favorites").orderByChild("email").equalTo(auth?.getEmail())
+            .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     for (snapshot in dataSnapshot.children) {
-                        val movies: GetMovies? = snapshot.getValue(GetMovies::class.java)
-                        favoritesList?.add(movies!!)
-                    }
+                        val isFavorite= Objects.requireNonNull(snapshot.child("favorite").value)
 
-                    populateList()
+                        if(isFavorite as Boolean) {
+                            val favorite: GetMovies?=snapshot.getValue(GetMovies::class.java)
+                            favoritesList?.add(favorite!!)
+                        }
+
+                        populateList()
+
+                    }
                 }
 
                 override fun onCancelled(databaseError: DatabaseError) {
                     Log.d("MyListActivity: ", databaseError.message)
                 }
             })
-
     }
 
     private fun populateList(){
+        val rootView = window.decorView.rootView
+        hidePogressBar(rootView)
         recyclerView?.layoutManager = GridLayoutManager(this, 3)
         val adapter =favoritesList?.let {
             MyListAdapter(

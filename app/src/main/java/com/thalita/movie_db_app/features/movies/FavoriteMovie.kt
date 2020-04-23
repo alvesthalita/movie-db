@@ -8,6 +8,7 @@ class FavoriteMovie {
     private var posterPath: String? = null
     private var movieID: Int? = null
     private var watchedMovie: Boolean? = null
+    private var favorite: Boolean? = null
 
     fun getUserID(): FavoriteMovie? {
         return userID
@@ -51,5 +52,13 @@ class FavoriteMovie {
 
     fun setWatchedMovie(watchedMovie: Boolean?) {
         this.watchedMovie = watchedMovie
+    }
+
+    fun getFavorite(): Boolean? {
+        return favorite
+    }
+
+    fun setFavorite(favorite: Boolean?) {
+        this.favorite = favorite
     }
 }
