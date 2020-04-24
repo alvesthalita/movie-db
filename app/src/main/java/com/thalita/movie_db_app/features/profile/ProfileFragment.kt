@@ -78,6 +78,7 @@ class ProfileFragment : Fragment() {
         userProfile =SignInUser()
         firebaseAuth = ConfigFirebase().getFirebaseAuth()
         databaseReference=FirebaseDatabase.getInstance().reference
+        edt_email?.isEnabled = false
 
         getUserProfile()
         initActions()
@@ -87,9 +88,6 @@ class ProfileFragment : Fragment() {
         underlineText()
 
         btnEdit?.setOnClickListener {
-            btnEdit?.invisible()
-            btnLogOut?.invisible()
-            showProgressBar(rootView!!)
             validateFields()
         }
 
@@ -115,23 +113,23 @@ class ProfileFragment : Fragment() {
     }
 
     private fun validateFields(){
-        if(edt_email!!.text.isEmpty()){
-            Toast.makeText(
-                activity,
-                "O campo de e-mail é obrigatório, tente novamente.",
-                Toast.LENGTH_LONG
-            ).show()
-            return
-        }
-
-        if(!ValidateInput().isEmailValid(edt_email!!.text.toString())){
-            Toast.makeText(
-                activity,
-                "Por favor, informe um e-mail válida. Tente novamente.",
-                Toast.LENGTH_LONG
-            ).show()
-            return
-        }
+//        if(edt_email!!.text.isEmpty()){
+//            Toast.makeText(
+//                activity,
+//                "O campo de e-mail é obrigatório, tente novamente.",
+//                Toast.LENGTH_LONG
+//            ).show()
+//            return
+//        }
+//
+//        if(!ValidateInput().isEmailValid(edt_email!!.text.toString())){
+//            Toast.makeText(
+//                activity,
+//                "Por favor, informe um e-mail válida. Tente novamente.",
+//                Toast.LENGTH_LONG
+//            ).show()
+//            return
+//        }
 
         if(edt_password!!.text.isEmpty()){
             Toast.makeText(
@@ -158,9 +156,12 @@ class ProfileFragment : Fragment() {
                 Toast.LENGTH_LONG
             ).show()
             return
-        }else{
-            updateEmail()
         }
+
+        btnEdit?.invisible()
+        btnLogOut?.invisible()
+        showProgressBar(rootView!!)
+        updatePassword()
 
     }
 

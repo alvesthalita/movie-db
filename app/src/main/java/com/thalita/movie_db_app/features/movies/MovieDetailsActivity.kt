@@ -5,7 +5,6 @@ import android.widget.*
 import androidx.annotation.RequiresApi
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
-import com.thalita.movie_db_app.R
 import com.thalita.movie_db_app.core.extension.*
 import com.thalita.movie_db_app.core.plataform.BaseActivity
 import com.thalita.movie_db_app.core.plataform.ConfigFirebase
@@ -14,11 +13,8 @@ import com.thalita.movie_db_app.core.plataform.UserAuth
 import com.thalita.movie_db_app.core.repository.MovieDetailsRepository
 import java.util.*
 import kotlin.concurrent.schedule
+import com.thalita.movie_db_app.R
 
-
-/**
- * Em desenvolvimento para setar os filmes como favoritos e assistidos
- */
 class MovieDetailsActivity : BaseActivity(), MovieDetailsApiListener{
 
     private lateinit var movieTitle: TextView
@@ -41,6 +37,8 @@ class MovieDetailsActivity : BaseActivity(), MovieDetailsApiListener{
     private var userAuth: UserAuth?=null
     private var firebaseAuth: FirebaseAuth?=null
     private var favorite: FavoriteMovie?=null
+    private var favoritesList: MutableList<FavoriteMovie>?=null
+    private var updateMovie: MutableList<FavoriteMovie>?=null
 
     override fun setLayout() {
         hideTop(true)
@@ -73,13 +71,14 @@ class MovieDetailsActivity : BaseActivity(), MovieDetailsApiListener{
         favorite =FavoriteMovie()
         userAuth =UserAuth(this)
         firebaseAuth = ConfigFirebase().getFirebaseAuth()
+        favoritesList = mutableListOf()
+        updateMovie = mutableListOf()
 
         Timer("SettingUp", false).schedule(1000) {
             getMoviesDetails()
         }
 
-        setMovieAsFavorite()
-        setMovieAsWatched()
+        setCheckBoxAction()
         setOnClickClose()
     }
 
@@ -107,65 +106,72 @@ class MovieDetailsActivity : BaseActivity(), MovieDetailsApiListener{
         }
     }
 
-    /**
-     * Em desenvolvimento
-     */
-    private fun setMovieAsFavorite(){
-        favoriteMovie.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                saveMovieAsFavoriteOrWatched(isFavorite = true, isWatched=false)
+    private fun setCheckBoxAction(){
+        favoriteMovie.setOnClickListener { _ ->
+            if(favoriteMovie.isChecked) {
+                setMovieAsFavorite(isFavorite = true)
+            }else{
+                setMovieAsFavorite(isFavorite = false)
+            }
+        }
+
+        watchedMovie.setOnClickListener { _ ->
+            if(watchedMovie.isChecked) {
+                setMovieAsWatched(isWatched = true)
+            }else{
+                setMovieAsWatched(isWatched = false)
             }
         }
     }
 
-    /**
-     * Em desenvolvimento
-     */
-    private fun setMovieAsWatched(){
-        watchedMovie.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                saveMovieAsFavoriteOrWatched(isFavorite=false, isWatched=true)
+    private fun setMovieAsFavorite(isFavorite: Boolean){
+        var isOnTheList= false
+
+        for (i in favoritesList!!.indices){
+            if(favoritesList!![i].getMovieID() == movieID){
+                isOnTheList = true
+                val key = favoritesList!![i].getKey().toString()
+                val reference: DatabaseReference=ConfigFirebase().getFirebase()!!.child("favorites").child(key)
+                reference.child("favorite").setValue(isFavorite)
+                break
             }
+        }
+
+        if(!isOnTheList){
+            favorite!!.setEmail(userAuth!!.getEmail())
+            favorite!!.setMovieID(movieID)
+            favorite!!.setTitleMovie(movieName)
+            favorite!!.setPosterPath(moviePosterPath)
+            favorite!!.setWatchedMovie(false)
+            favorite!!.setFavorite(isFavorite)
+            saveMovie(favorite!!)
         }
     }
 
-    private fun saveMovieAsFavoriteOrWatched(isFavorite: Boolean, isWatched: Boolean){
-        databaseReference = FirebaseDatabase.getInstance().reference
-        var updateMovie: Boolean = false
-        databaseReference!!.child("favorites").orderByChild("email").equalTo(userAuth?.getEmail())
-            .addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    for (snapshot in dataSnapshot.children) {
-                        val movie =snapshot.getValue(FavoriteMovie::class.java)!!
+    private fun setMovieAsWatched(isWatched: Boolean){
+        var isOnTheList= false
 
-                        if(movieID.toString() == movie.getMovieID().toString()) {
-                            //do something
-                            updateMovie = true
-                            break
-                        }
-                    }
-                }
+        for (i in favoritesList!!.indices){
+            if(favoritesList!![i].getMovieID() == movieID){
+                isOnTheList = true
+                val key = favoritesList!![i].getKey().toString()
+                val reference: DatabaseReference=ConfigFirebase().getFirebase()!!.child("favorites").child(key)
+                reference.child("watchedMovie").setValue(isWatched)
+                break
+            }
+        }
 
-                override fun onCancelled(databaseError: DatabaseError) {
-                    watchedMovie.unChecked()
-                    favoriteMovie.unChecked()
-                }
-            })
-
-//        if(!updateMovie){
-//            favorite!!.setEmail(userAuth!!.getEmail())
-//            favorite!!.setMovieID(movieID)
-//            favorite!!.setTitleMovie(movieName)
-//            favorite!!.setPosterPath(moviePosterPath)
-//            favorite!!.setWatchedMovie(isWatched)
-//            favorite!!.setFavorite(isFavorite)
-//            saveMovie(favorite!!)
-//        }
+        if(!isOnTheList){
+            favorite!!.setEmail(userAuth!!.getEmail())
+            favorite!!.setMovieID(movieID)
+            favorite!!.setTitleMovie(movieName)
+            favorite!!.setPosterPath(moviePosterPath)
+            favorite!!.setWatchedMovie(isWatched)
+            favorite!!.setFavorite(false)
+            saveMovie(favorite!!)
+        }
     }
 
-    /**
-     * Em desenvolvimento
-     */
     private fun saveMovie(data: FavoriteMovie): Boolean {
         return try {
             databaseReference = ConfigFirebase().getFirebase()
@@ -191,7 +197,9 @@ class MovieDetailsActivity : BaseActivity(), MovieDetailsApiListener{
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     for (snapshot in dataSnapshot.children) {
-                       val movie =snapshot.getValue(FavoriteMovie::class.java)!!
+                        val movie =snapshot.getValue(FavoriteMovie::class.java)!!
+                        movie.setKey(snapshot.key.toString())
+                        favoritesList?.add(movie)
 
                         if(movieID.toString() == movie.getMovieID().toString()) {
                             if(movie.getFavorite() as Boolean) {
@@ -215,10 +223,10 @@ class MovieDetailsActivity : BaseActivity(), MovieDetailsApiListener{
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onValidateRequestSuccess(result: MovieDetailsResult) {
+        markAsFavoriteAndWatchedMovie()
         val rootView = window.decorView.rootView
         hidePogressBar(rootView)
         scrollView.visible()
-        markAsFavoriteAndWatchedMovie()
         val posterURL= if (result.backdrop_path.isNullOrEmpty()) "" else "https://image.tmdb.org/t/p/w500" + result.backdrop_path
         if (posterURL.isEmpty()) imagePoster.setImageDrawable(getDrawable(R.drawable.unavailable_photo)) else imagePoster.loadFromUrl(posterURL)
 

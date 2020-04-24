@@ -9,6 +9,7 @@ class FavoriteMovie {
     private var movieID: Int? = null
     private var watchedMovie: Boolean? = null
     private var favorite: Boolean? = null
+    private var key: String? = null
 
     fun getUserID(): FavoriteMovie? {
         return userID
@@ -60,5 +61,13 @@ class FavoriteMovie {
 
     fun setFavorite(favorite: Boolean?) {
         this.favorite = favorite
+    }
+
+    fun getKey(): String? {
+        return key
+    }
+
+    fun setKey(key: String?) {
+        this.key = key
     }
 }
