@@ -16,12 +16,6 @@
             android:layout_gravity="center"
             android:orientation="vertical">
 
-<!--            <View-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="2dp"-->
-<!--                android:layout_margin="10dp"-->
-<!--                android:background="@color/colorWhite"/>-->
-
             <LinearLayout
                 android:id="@+id/linear_myList"
                 android:layout_width="match_parent"
@@ -33,13 +27,13 @@
                 <ImageView
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    android:src="@drawable/ic_list"/>
+                    android:src="@drawable/ic_list_black"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/title_my_list"
-                    android:textColor="@color/colorWhite"
+                    android:textColor="@color/colorPrimaryText"
                     android:textSize="18sp"
                     android:textStyle="bold"/>
 
@@ -49,7 +43,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
                 android:layout_margin="10dp"
-                android:background="@color/colorWhite"/>
+                android:background="@color/colorPrimaryText"/>
 
             <LinearLayout
                 android:id="@+id/linear_watched"
@@ -62,13 +56,13 @@
                 <ImageView
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    android:src="@drawable/ic_tv"/>
+                    android:src="@drawable/ic_tv_black"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/title_watched"
-                    android:textColor="@color/colorWhite"
+                    android:textColor="@color/colorPrimaryText"
                     android:textSize="18sp"
                     android:textStyle="bold"/>
 
@@ -80,7 +74,7 @@
                 android:layout_height="2dp"
                 android:layout_margin="10dp"
                 android:visibility="gone"
-                android:background="@color/colorWhite"/>
+                android:background="@color/colorPrimaryText"/>
 
             <LinearLayout
                 android:id="@+id/linear_statistic"
@@ -94,13 +88,13 @@
                 <ImageView
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    android:src="@drawable/ic_poll" />
+                    android:src="@drawable/ic_poll_black" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/title_statistic"
-                    android:textColor="@color/colorWhite"
+                    android:textColor="@color/colorPrimaryText"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 

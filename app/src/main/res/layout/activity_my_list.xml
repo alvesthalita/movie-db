@@ -20,7 +20,7 @@
         android:layout_height="50dp"
         android:background="@color/colorPrimaryDark"
         android:text="@string/title_my_list"
-        android:textColor="@color/colorWhite"
+        android:textColor="@color/colorAccentLight"
         android:gravity="center"
         android:textSize="30sp"
         android:textStyle="bold"/>

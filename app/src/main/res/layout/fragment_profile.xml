@@ -19,7 +19,8 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="vertical"
-            android:layout_margin="16dp">
+            android:layout_margin="16dp"
+            android:background="@drawable/white_background_grey_border">
 
             <com.beardedhen.androidbootstrap.BootstrapCircleThumbnail
                 android:layout_width="150dp"
@@ -37,7 +38,7 @@
                 android:layout_marginTop="10dp"
                 android:visibility="gone"
                 android:text="@string/title_edit_photo"
-                android:textColor="@color/colorWhite"/>
+                android:textColor="@color/colorAccentLight"/>
 
             <TextView
                 android:id="@+id/tv_profile_fullName"
@@ -47,7 +48,7 @@
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:gravity="center"
-                android:textColor="@color/colorWhite"
+                android:textColor="@color/colorPrimaryText"
                 android:layout_marginTop="30dp"/>
 
             <com.beardedhen.androidbootstrap.BootstrapEditText
@@ -57,6 +58,8 @@
                 android:hint="@string/title_email"
                 android:inputType="textEmailAddress"
                 android:layout_marginTop="30dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
                 app:bootstrapSize="md"
                 app:bootstrapBrand="info"
                 app:roundedCorners="true"/>
@@ -68,6 +71,8 @@
                 android:hint="@string/title_password"
                 android:inputType="textPassword"
                 android:layout_marginTop="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
                 app:bootstrapSize="md"
                 app:bootstrapBrand="info"
                 app:roundedCorners="true"/>
@@ -79,6 +84,8 @@
                 android:hint="@string/title_confirm_password"
                 android:inputType="textPassword"
                 android:layout_marginTop="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
                 app:bootstrapSize="md"
                 app:bootstrapBrand="info"
                 app:roundedCorners="true"/>
@@ -89,6 +96,9 @@
                 android:layout_height="wrap_content"
                 android:text="@string/title_edit"
                 android:layout_marginTop="30dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:backgroundTint="@color/colorSecond"
                 app:bootstrapSize="lg"
                 app:buttonMode="regular"
                 app:showOutline="false"
@@ -101,6 +111,7 @@
                 android:visibility="gone"
                 android:layout_gravity="center"
                 android:layout_marginTop="20dp"
+                android:layout_marginBottom="30dp"
                 android:theme="@style/ProgressBarTheme"
                 android:id="@+id/progressBar"
                 tools:visibility="gone"/>
@@ -111,6 +122,10 @@
                 android:layout_height="wrap_content"
                 android:text="@string/title_logout"
                 android:layout_marginTop="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="30dp"
+                android:backgroundTint="@color/colorPrimaryDark"
                 app:bootstrapBrand="danger"
                 app:bootstrapSize="lg"
                 app:buttonMode="regular"
