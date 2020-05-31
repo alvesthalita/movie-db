@@ -17,6 +17,7 @@ import com.thalita.movie_db_app.core.repository.MovieRepository
 import com.thalita.movie_db_app.features.movies.MovieListAdapter
 import com.thalita.movie_db_app.features.movies.MovieResult
 import com.thalita.movie_db_app.features.movies.MoviesApiListener
+import java.util.*
 
 
 class HomeFragment : Fragment(),
@@ -60,7 +61,7 @@ class HomeFragment : Fragment(),
         val adapter =activity?.let {
             MovieListAdapter(
                 it,
-                result
+                Arrays.copyOf(result, result.size - 2)
             )
         }
         recyclerView!!.isClickable = true
