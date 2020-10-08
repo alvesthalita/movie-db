@@ -178,11 +178,7 @@ class MovieDetailsActivity : BaseActivity(), MovieDetailsApiListener{
             databaseReference!!.child("favorites").push().setValue(data)
             true
         } catch (e: java.lang.Exception) {
-            Toast.makeText(
-                applicationContext,
-                "Não foi possível incluir na sua lista, tente novamente mais tarde",
-                Toast.LENGTH_LONG
-            ).show()
+            showToastMessage(this, "Não foi possível incluir na sua lista, tente novamente mais tarde")
             e.printStackTrace()
             false
         }
@@ -242,7 +238,7 @@ class MovieDetailsActivity : BaseActivity(), MovieDetailsApiListener{
 
     override fun onValidateRequestFail(message: String?, error: Boolean?) {
         finish()
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+        showToastMessage(this, message!!)
     }
 
 }

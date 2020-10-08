@@ -11,7 +11,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ScrollView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.beardedhen.androidbootstrap.BootstrapButton
@@ -20,16 +19,12 @@ import com.beardedhen.androidbootstrap.BootstrapEditText
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-import com.thalita.movie_db_app.core.extension.hidePogressBar
+import com.thalita.movie_db_app.R
+import com.thalita.movie_db_app.core.extension.*
 import com.thalita.movie_db_app.core.plataform.ConfigFirebase
 import com.thalita.movie_db_app.core.plataform.UserAuth
-import com.thalita.movie_db_app.core.plataform.ValidateInput
 import com.thalita.movie_db_app.features.main.MainActivity
 import com.thalita.movie_db_app.features.signin.SignInUser
-import com.thalita.movie_db_app.R
-import com.thalita.movie_db_app.core.extension.invisible
-import com.thalita.movie_db_app.core.extension.showProgressBar
-import com.thalita.movie_db_app.core.extension.visible
 
 
 /**
@@ -113,48 +108,18 @@ class ProfileFragment : Fragment() {
     }
 
     private fun validateFields(){
-//        if(edt_email!!.text.isEmpty()){
-//            Toast.makeText(
-//                activity,
-//                "O campo de e-mail é obrigatório, tente novamente.",
-//                Toast.LENGTH_LONG
-//            ).show()
-//            return
-//        }
-//
-//        if(!ValidateInput().isEmailValid(edt_email!!.text.toString())){
-//            Toast.makeText(
-//                activity,
-//                "Por favor, informe um e-mail válida. Tente novamente.",
-//                Toast.LENGTH_LONG
-//            ).show()
-//            return
-//        }
-
         if(edt_password!!.text.isEmpty()){
-            Toast.makeText(
-                activity,
-                "O campo de senha é obrigatório, tente novamente.",
-                Toast.LENGTH_LONG
-            ).show()
+            showToastMessage(activity!!, "O campo de senha é obrigatório, tente novamente.")
             return
         }
 
         if(edt_confirmPassword!!.text.isEmpty()){
-            Toast.makeText(
-                activity,
-                "O campo de confirmação de senha é obrigatório, tente novamente.",
-                Toast.LENGTH_LONG
-            ).show()
+            showToastMessage(activity!!, "O campo de confirmação de senha é obrigatório, tente novamente.")
             return
         }
 
         if(edt_password!!.text.toString() != edt_confirmPassword!!.text.toString()){
-            Toast.makeText(
-                activity,
-                "As senha não conferem, tente novamente",
-                Toast.LENGTH_LONG
-            ).show()
+            showToastMessage(activity!!, "As senha não conferem, tente novamente")
             return
         }
 
@@ -206,11 +171,7 @@ class ProfileFragment : Fragment() {
                     edt_password?.setText("")
                     edt_confirmPassword?.setText("")
 
-                    Toast.makeText(
-                        context,
-                        "Dados alterados com sucesso!!",
-                        Toast.LENGTH_LONG
-                    ).show()
+                    showToastMessage(activity!!, "Dados alterados com sucesso!!")
                 }
             }
     }

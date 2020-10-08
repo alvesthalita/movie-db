@@ -1,13 +1,12 @@
 package com.thalita.movie_db_app.features.login
 
-import android.view.View
-import android.widget.Toast
 import com.beardedhen.androidbootstrap.BootstrapButton
 import com.beardedhen.androidbootstrap.BootstrapEditText
 import com.google.firebase.auth.FirebaseAuth
 import com.thalita.movie_db_app.R
 import com.thalita.movie_db_app.core.extension.invisible
 import com.thalita.movie_db_app.core.extension.showProgressBar
+import com.thalita.movie_db_app.core.extension.showToastMessage
 import com.thalita.movie_db_app.core.plataform.BaseActivity
 import com.thalita.movie_db_app.core.plataform.ConfigFirebase
 import com.thalita.movie_db_app.core.plataform.ValidateInput
@@ -54,20 +53,12 @@ class RecoverPasswordActivity : BaseActivity() {
 
     private fun validateField(){
         if(edt_recover_email!!.text.isEmpty()){
-            Toast.makeText(
-                this,
-                "O campo de e-mail é obrigatório, tente novamente.",
-                Toast.LENGTH_LONG
-            ).show()
+            showToastMessage(this, "O campo de e-mail é obrigatório, tente novamente.")
             return
         }
 
         if(!ValidateInput().isEmailValid(edt_recover_email!!.text.toString())){
-            Toast.makeText(
-                this,
-                "Por favor, informe um e-mail válida. Tente novamente.",
-                Toast.LENGTH_LONG
-            ).show()
+            showToastMessage(this, "Por favor, informe um e-mail válida. Tente novamente.")
             return
         }else{
             val rootView = window.decorView.rootView
@@ -84,20 +75,12 @@ class RecoverPasswordActivity : BaseActivity() {
 
             firebaseAuth!!.sendPasswordResetEmail(email).addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    Toast.makeText(
-                        applicationContext,
-                        "Em instantes, você receberá um e-mail para a recuperação de senha",
-                        Toast.LENGTH_LONG
-                    ).show()
+                    showToastMessage(this, "Em instantes, você receberá um e-mail para a recuperação de senha")
                     val intent=intent
                     finish()
                     startActivity(intent)
                 } else {
-                    Toast.makeText(
-                        applicationContext,
-                        "Não foi possível recuperar sua senha, tente novamente mais tarde.",
-                        Toast.LENGTH_LONG
-                    ).show()
+                    showToastMessage(this, "Não foi possível recuperar sua senha, tente novamente mais tarde.")
                     val intent=intent
                     finish()
                     startActivity(intent)

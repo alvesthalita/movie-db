@@ -1,17 +1,13 @@
 package com.thalita.movie_db_app.features.signin
 
 import android.content.Intent
-import android.view.View
 import android.widget.Toast
 import com.beardedhen.androidbootstrap.BootstrapButton
 import com.beardedhen.androidbootstrap.BootstrapEditText
 import com.google.firebase.auth.*
 import com.google.firebase.database.DatabaseReference
 import com.thalita.movie_db_app.R
-import com.thalita.movie_db_app.core.extension.hidePogressBar
-import com.thalita.movie_db_app.core.extension.invisible
-import com.thalita.movie_db_app.core.extension.showProgressBar
-import com.thalita.movie_db_app.core.extension.visible
+import com.thalita.movie_db_app.core.extension.*
 import com.thalita.movie_db_app.core.plataform.BaseActivity
 import com.thalita.movie_db_app.core.plataform.ConfigFirebase
 import com.thalita.movie_db_app.core.plataform.UserAuth
@@ -70,56 +66,32 @@ class SignInActivity : BaseActivity() {
 
     private fun validateFields(){
         if(edt_fullName!!.text.isEmpty()){
-            Toast.makeText(
-                this,
-                "O campo nome é obrigatório, tente novamente.",
-                Toast.LENGTH_LONG
-            ).show()
+            showToastMessage(this, "O campo nome é obrigatório, tente novamente.")
             return
         }
 
         if(edt_email!!.text.isEmpty()){
-            Toast.makeText(
-                this,
-                "O campo de e-mail é obrigatório, tente novamente.",
-                Toast.LENGTH_LONG
-            ).show()
+            showToastMessage(this, "O campo de e-mail é obrigatório, tente novamente.")
             return
         }
 
         if(!ValidateInput().isEmailValid(edt_email!!.text.toString())){
-            Toast.makeText(
-                this,
-                "Por favor, informe um e-mail válida. Tente novamente.",
-                Toast.LENGTH_LONG
-            ).show()
+            showToastMessage(this, "Por favor, informe um e-mail válida. Tente novamente.")
             return
         }
 
         if(edt_password!!.text.isEmpty()){
-            Toast.makeText(
-                this,
-                "O campo de senha é obrigatório, tente novamente.",
-                Toast.LENGTH_LONG
-            ).show()
+            showToastMessage(this, "O campo de senha é obrigatório, tente novamente.")
             return
         }
 
         if(edt_confirm_password!!.text.isEmpty()){
-            Toast.makeText(
-                this,
-                "O campo de confirmação de senha é obrigatório, tente novamente.",
-                Toast.LENGTH_LONG
-            ).show()
+            showToastMessage(this, "O campo de confirmação de senha é obrigatório, tente novamente.")
             return
         }
 
         if(edt_password!!.text.toString() != edt_confirm_password!!.text.toString()){
-            Toast.makeText(
-                this,
-                "As senha não conferem, tente novamente",
-                Toast.LENGTH_LONG
-            ).show()
+            showToastMessage(this, "As senha não conferem, tente novamente")
             return
         }else{
             user!!.setFullName(edt_fullName!!.text.toString())
@@ -158,7 +130,8 @@ class SignInActivity : BaseActivity() {
                     } catch (e: Exception) {
                         e.printStackTrace()
                     }
-                    Toast.makeText(applicationContext, error, Toast.LENGTH_LONG).show()
+
+                    showToastMessage(this, error)
                 }
             }
 
@@ -176,11 +149,7 @@ class SignInActivity : BaseActivity() {
 
         userUpdate!!.updateProfile(profileUpdates)
             .addOnCompleteListener { task ->
-                Toast.makeText(
-                    applicationContext,
-                    "Cadastro efetuado com sucesso!!",
-                    Toast.LENGTH_LONG
-                ).show()
+                showToastMessage(this, "Cadastro efetuado com sucesso!!")
             }
 
         userAuth?.saveUser(user.getEmail(), user.getPassword())
@@ -199,11 +168,7 @@ class SignInActivity : BaseActivity() {
                     startActivity(intent)
                     finish()
                 } else {
-                    Toast.makeText(
-                        applicationContext,
-                        "Não foi possível completar a transação, tente mais tarde!!!",
-                        Toast.LENGTH_LONG
-                    ).show()
+                    showToastMessage(this, "Não foi possível completar a transação, tente mais tarde!!!")
                     firebaseAuth!!.signOut()
                     val intent=Intent(applicationContext, MainActivity::class.java)
                     finish()

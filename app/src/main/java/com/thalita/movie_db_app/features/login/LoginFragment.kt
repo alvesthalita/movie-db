@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.beardedhen.androidbootstrap.BootstrapButton
@@ -16,16 +15,13 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.thalita.movie_db_app.R
-import com.thalita.movie_db_app.core.extension.hidePogressBar
-import com.thalita.movie_db_app.core.extension.invisible
-import com.thalita.movie_db_app.core.extension.showProgressBar
-import com.thalita.movie_db_app.core.extension.visible
-import com.thalita.movie_db_app.features.signin.SignInUser
-import com.thalita.movie_db_app.features.main.MainActivity
-import com.thalita.movie_db_app.features.signin.SignInActivity
+import com.thalita.movie_db_app.core.extension.*
 import com.thalita.movie_db_app.core.plataform.ConfigFirebase
 import com.thalita.movie_db_app.core.plataform.UserAuth
 import com.thalita.movie_db_app.core.plataform.ValidateInput
+import com.thalita.movie_db_app.features.main.MainActivity
+import com.thalita.movie_db_app.features.signin.SignInActivity
+import com.thalita.movie_db_app.features.signin.SignInUser
 
 class LoginFragment : Fragment() {
 
@@ -97,29 +93,17 @@ class LoginFragment : Fragment() {
 
     private fun validateFields(){
         if(edt_login.text.isEmpty()){
-            Toast.makeText(
-                activity,
-                "O campo de e-mail é obrigatório, tente novamente.",
-                Toast.LENGTH_LONG
-            ).show()
+            showToastMessage(activity!!, "O campo de e-mail é obrigatório, tente novamente.")
             return
         }
 
         if(!ValidateInput().isEmailValid(edt_login.text.toString())){
-            Toast.makeText(
-                activity,
-                "E-mail inválido, por favor insira um e-mail válido e tente novamente.",
-                Toast.LENGTH_LONG
-            ).show()
+            showToastMessage(activity!!, "E-mail inválido, por favor insira um e-mail válido e tente novamente.")
             return
         }
 
         if(edt_password.text.isEmpty()){
-            Toast.makeText(
-                activity,
-                "O campo de senha é obrigatório, tente novamente.",
-                Toast.LENGTH_LONG
-            ).show()
+            showToastMessage(activity!!, "O campo de senha é obrigatório, tente novamente.")
             return
         }
 
@@ -141,11 +125,7 @@ class LoginFragment : Fragment() {
                     } else {
                         buttonsLayout?.visible()
                         hidePogressBar(rootView!!)
-                        Toast.makeText(
-                            context,
-                            "Usuário ou senha inválidos",
-                            Toast.LENGTH_LONG
-                        ).show()
+                        showToastMessage(activity!!, "Usuário ou senha inválidos.")
                     }
                 }
         }

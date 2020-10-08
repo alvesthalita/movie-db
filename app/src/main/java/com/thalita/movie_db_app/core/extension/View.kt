@@ -1,11 +1,13 @@
 package com.thalita.movie_db_app.core.extension
 
+import android.app.Activity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.annotation.LayoutRes
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
@@ -15,14 +17,29 @@ fun View.cancelTransition() {
     transitionName = null
 }
 
+/**
+ * Validate the visibility of the view
+ */
 fun View.isVisible() = this.visibility == View.VISIBLE
 
+/**
+ * Set the view as visible component
+ */
 fun View.visible() { this.visibility = View.VISIBLE }
 
+/**
+ * Set the view as invisible
+ */
 fun View.invisible() { this.visibility = View.GONE }
 
+/**
+ * Set the checkbox checked
+ */
 fun CheckBox.checked(){ this.isChecked = true}
 
+/**
+ * Set the checkbox unchecked
+ */
 fun CheckBox.unChecked(){ this.isChecked = false}
 
 fun ViewGroup.inflate(@LayoutRes layoutRes: Int): View =
@@ -36,6 +53,13 @@ fun ImageView.loadFromUrl(url: String) =
         .load(url)
         .transition(DrawableTransitionOptions.withCrossFade())
         .into(this)
+
+/**
+ * Show the message on the screen
+ */
+fun showToastMessage(activity: Activity, message: String){
+    Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
+}
 
 /**
  * Shows the progress bar when is loading the items

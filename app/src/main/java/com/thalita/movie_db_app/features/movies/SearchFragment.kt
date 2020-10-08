@@ -1,5 +1,6 @@
 package com.thalita.movie_db_app.features.movies
 
+import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.thalita.movie_db_app.R
 import com.thalita.movie_db_app.core.extension.hidePogressBar
 import com.thalita.movie_db_app.core.extension.showProgressBar
+import com.thalita.movie_db_app.core.extension.showToastMessage
 import com.thalita.movie_db_app.core.repository.MovieRepository
 
 class SearchFragment : Fragment(),
@@ -91,7 +93,7 @@ class SearchFragment : Fragment(),
     override fun onValidateRequestFail(message: String?, error: Boolean) {
         rootView?.let { hidePogressBar(it) }
         if(error) {
-            Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+            showToastMessage(context as Activity, message!!)
         }
     }
 
